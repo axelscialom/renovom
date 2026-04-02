@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -22,50 +22,28 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-body); background: var(--cream); color: var(--dark); min-height: 100vh; }
-
-.app-nav {
-  padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: space-between;
-  background: var(--white); border-bottom: 0.5px solid var(--gray-light);
-  position: sticky; top: 0; z-index: 100;
-}
+.app-nav { padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: space-between; background: var(--white); border-bottom: 0.5px solid var(--gray-light); position: sticky; top: 0; z-index: 100; }
 .nav-logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--violet); text-decoration: none; }
 .nav-logo span { color: var(--violet-light); }
 .nav-step-info { font-size: 0.8rem; color: var(--gray); }
-
 .app-container { max-width: 680px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
-
 .screen { display: none; animation: fadeIn 0.3s ease; }
 .screen.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
 .progress { display: flex; gap: 5px; margin-bottom: 2.5rem; }
 .progress-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--gray-light); transition: background 0.3s; }
 .progress-seg.done { background: var(--violet); }
 .progress-seg.active { background: var(--violet-light); }
-
 .step-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet); margin-bottom: 0.5rem; }
 .screen-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; color: var(--dark); margin-bottom: 0.4rem; line-height: 1.2; }
 .screen-sub { font-size: 0.88rem; color: var(--gray); line-height: 1.6; margin-bottom: 2rem; }
-
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
-
-.choice-card {
-  background: var(--white); border: 1px solid var(--gray-light);
-  border-radius: 14px; padding: 1.1rem; cursor: pointer;
-  transition: all 0.15s; text-align: center;
-}
+.choice-card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 14px; padding: 1.1rem; cursor: pointer; transition: all 0.15s; text-align: center; }
 .choice-card:hover { border-color: var(--violet-light); background: var(--violet-pale); }
 .choice-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
 .choice-card .cc-icon { font-size: 1.6rem; margin-bottom: 6px; }
 .choice-card .cc-label { font-size: 0.85rem; font-weight: 500; color: var(--dark); }
-
-.upload-zone {
-  border: 2px dashed var(--gray-light); border-radius: 16px;
-  padding: 3rem 1rem; text-align: center; cursor: pointer;
-  background: var(--white); transition: all 0.2s; position: relative;
-  margin-bottom: 2rem;
-}
+.upload-zone { border: 2px dashed var(--gray-light); border-radius: 16px; padding: 3rem 1rem; text-align: center; cursor: pointer; background: var(--white); transition: all 0.2s; position: relative; margin-bottom: 2rem; }
 .upload-zone:hover { border-color: var(--violet-light); background: var(--violet-pale); }
 .upload-zone.has-photo { border-style: solid; border-color: var(--violet); padding: 0; overflow: hidden; }
 .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -73,113 +51,50 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
 .upload-title { font-size: 1rem; font-weight: 500; color: var(--dark); margin-bottom: 4px; }
 .upload-sub { font-size: 0.8rem; color: var(--gray); }
-.photo-badge {
-  position: absolute; bottom: 10px; right: 10px;
-  background: rgba(45,38,128,0.85); color: white;
-  font-size: 0.72rem; padding: 4px 12px; border-radius: 50px;
-  pointer-events: none; display: none;
-}
-
+.photo-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(45,38,128,0.85); color: white; font-size: 0.72rem; padding: 4px 12px; border-radius: 50px; pointer-events: none; display: none; }
 .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
-.budget-card {
-  background: var(--white); border: 1px solid var(--gray-light);
-  border-radius: 14px; padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.15s;
-}
+.budget-card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 14px; padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.15s; }
 .budget-card:hover { border-color: var(--violet-light); }
 .budget-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
 .budget-amount { font-size: 1rem; font-weight: 500; color: var(--dark); }
 .budget-desc { font-size: 0.75rem; color: var(--gray); margin-top: 2px; }
-
 .style-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 2rem; }
-.style-card {
-  background: var(--white); border: 1px solid var(--gray-light);
-  border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.15s;
-}
+.style-card { background: var(--white); border: 1px solid var(--gray-light); border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.15s; }
 .style-card:hover { border-color: var(--violet-light); }
 .style-card.selected { border: 2px solid var(--violet); }
 .style-thumb { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
 .style-name { font-size: 0.72rem; font-weight: 500; text-align: center; padding: 5px 4px 2px; color: var(--dark); }
 .style-mood { font-size: 0.62rem; text-align: center; color: var(--gray); padding: 0 4px 7px; line-height: 1.3; }
-
-.btn-primary {
-  background: var(--violet); color: var(--white);
-  border: none; border-radius: 50px; padding: 0.85rem 2rem;
-  font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
-  cursor: pointer; width: 100%; transition: all 0.2s;
-}
-.btn-primary:hover { background: var(--violet-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(45,38,128,0.25); }
-.btn-primary:disabled { background: var(--gray-light); color: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
-
-/* CHAT */
+.btn-primary { background: var(--violet); color: var(--white); border: none; border-radius: 50px; padding: 0.85rem 2rem; font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; transition: all 0.2s; }
+.btn-primary:hover { background: var(--violet-light); transform: translateY(-1px); }
+.btn-primary:disabled { background: var(--gray-light); color: var(--gray); cursor: not-allowed; transform: none; }
 .chat-wrap { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
 .chat-messages { padding: 1.2rem; display: flex; flex-direction: column; gap: 12px; max-height: 320px; overflow-y: auto; }
 .msg { display: flex; gap: 8px; align-items: flex-start; }
-.msg.ai .bubble {
-  background: var(--cream); border: 0.5px solid var(--gray-light);
-  border-radius: 4px 14px 14px 14px; padding: 10px 14px;
-  font-size: 0.85rem; color: var(--dark); line-height: 1.6; max-width: 88%;
-}
+.msg.ai .bubble { background: var(--cream); border: 0.5px solid var(--gray-light); border-radius: 4px 14px 14px 14px; padding: 10px 14px; font-size: 0.85rem; color: var(--dark); line-height: 1.6; max-width: 88%; }
 .msg.user { justify-content: flex-end; }
-.msg.user .bubble {
-  background: var(--violet); color: white;
-  border-radius: 14px 4px 14px 14px; padding: 10px 14px;
-  font-size: 0.85rem; line-height: 1.6; max-width: 75%;
-}
-.ai-av {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: var(--violet-pale); display: flex; align-items: center;
-  justify-content: center; font-size: 0.7rem; font-weight: 500;
-  color: var(--violet); flex-shrink: 0; margin-top: 2px;
-  font-family: var(--font-display);
-}
-.chat-input-row {
-  display: flex; gap: 8px; padding: 0.8rem 1rem;
-  border-top: 0.5px solid var(--gray-light);
-}
-.chat-input {
-  flex: 1; padding: 0.6rem 1rem; border: 1px solid var(--gray-light);
-  border-radius: 50px; font-size: 0.85rem; font-family: var(--font-body);
-  color: var(--dark); background: var(--cream); outline: none;
-}
+.msg.user .bubble { background: var(--violet); color: white; border-radius: 14px 4px 14px 14px; padding: 10px 14px; font-size: 0.85rem; line-height: 1.6; max-width: 75%; }
+.ai-av { width: 26px; height: 26px; border-radius: 50%; background: var(--violet-pale); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 500; color: var(--violet); flex-shrink: 0; margin-top: 2px; font-family: var(--font-display); }
+.chat-input-row { display: flex; gap: 8px; padding: 0.8rem 1rem; border-top: 0.5px solid var(--gray-light); }
+.chat-input { flex: 1; padding: 0.6rem 1rem; border: 1px solid var(--gray-light); border-radius: 50px; font-size: 0.85rem; font-family: var(--font-body); color: var(--dark); background: var(--cream); outline: none; }
 .chat-input:focus { border-color: var(--violet-light); }
-.chat-send {
-  background: var(--violet); color: white; border: none;
-  border-radius: 50px; padding: 0.6rem 1.1rem; font-size: 0.85rem;
-  cursor: pointer; transition: background 0.15s;
-}
+.chat-send { background: var(--violet); color: white; border: none; border-radius: 50px; padding: 0.6rem 1.1rem; font-size: 0.85rem; cursor: pointer; }
 .chat-send:hover { background: var(--violet-light); }
 .typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-.typing-dots span {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--gray);
-  animation: bounce 1s infinite;
-}
+.typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--gray); animation: bounce 1s infinite; }
 .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
 .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
 @keyframes bounce { 0%,60%,100%{ transform:translateY(0); } 30%{ transform:translateY(-5px); } }
-
-/* RESULTS */
 .result-hero { border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; position: relative; }
 .result-photo { width: 100%; max-height: 220px; object-fit: cover; display: block; filter: brightness(0.55); }
 .result-placeholder { height: 160px; background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
 .result-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
 .result-badge { background: rgba(255,255,255,0.15); color: white; font-size: 0.75rem; padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); }
 .result-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; color: white; }
-
-.cart-bar {
-  background: var(--violet-pale); border: 1px solid rgba(45,38,128,0.2);
-  border-radius: 12px; padding: 0.9rem 1.2rem;
-  display: none; justify-content: space-between; align-items: center;
-  margin-bottom: 1rem;
-}
+.cart-bar { background: var(--violet-pale); border: 1px solid rgba(45,38,128,0.2); border-radius: 12px; padding: 0.9rem 1.2rem; display: none; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 .cart-info { font-size: 0.85rem; font-weight: 500; color: var(--violet); }
 .cart-total { font-size: 1rem; font-weight: 500; color: var(--dark); }
-
-.product-card-full {
-  background: var(--white); border: 1px solid var(--gray-light);
-  border-radius: 14px; padding: 1rem; display: flex; gap: 12px;
-  margin-bottom: 10px; transition: all 0.15s;
-}
-.product-card-full:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.product-card-full { background: var(--white); border: 1px solid var(--gray-light); border-radius: 14px; padding: 1rem; display: flex; gap: 12px; margin-bottom: 10px; }
 .prod-img { width: 70px; height: 70px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
 .prod-info { flex: 1; min-width: 0; }
 .prod-store { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
@@ -187,27 +102,11 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .prod-ref { font-size: 0.72rem; color: var(--gray); margin-top: 1px; }
 .prod-price { font-size: 1rem; font-weight: 500; color: var(--violet); margin-top: 4px; }
 .prod-delivery { font-size: 0.72rem; color: var(--green); margin-top: 1px; }
-.btn-add-cart {
-  background: var(--violet); color: white; border: none;
-  border-radius: 50px; padding: 5px 14px; font-size: 0.75rem;
-  font-weight: 500; cursor: pointer; margin-top: 8px; transition: background 0.15s;
-  white-space: nowrap;
-}
+.btn-add-cart { background: var(--violet); color: white; border: none; border-radius: 50px; padding: 5px 14px; font-size: 0.75rem; font-weight: 500; cursor: pointer; margin-top: 8px; transition: background 0.15s; }
 .btn-add-cart:hover { background: var(--violet-light); }
 .btn-add-cart.added { background: var(--green); }
-
-.btn-order {
-  background: var(--violet); color: white; border: none; border-radius: 50px;
-  padding: 0.9rem 2rem; font-family: var(--font-body); font-size: 0.9rem;
-  font-weight: 500; cursor: pointer; width: 100%; margin-top: 1rem;
-  display: none; transition: all 0.2s;
-}
+.btn-order { background: var(--violet); color: white; border: none; border-radius: 50px; padding: 0.9rem 2rem; font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; margin-top: 1rem; display: none; transition: all 0.2s; }
 .btn-order:hover { background: var(--violet-light); transform: translateY(-1px); }
-
-@media (max-width: 600px) {
-  .style-grid { grid-template-columns: repeat(3, 1fr); }
-  .grid-2 { grid-template-columns: 1fr 1fr; }
-}
 </style>
 </head>
 <body>
@@ -219,13 +118,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 
 <div class="app-container">
 
-  <!-- SCREEN 1 : PIÈCE -->
   <div class="screen active" id="s1">
-    <div class="progress">
-      <div class="progress-seg active"></div><div class="progress-seg"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-    </div>
+    <div class="progress"><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
     <div class="step-label">Étape 1 / 6</div>
     <h1 class="screen-title">Quelle pièce souhaitez-vous rénover ?</h1>
     <p class="screen-sub">Nous adapterons chaque recommandation à votre espace.</p>
@@ -240,13 +134,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn1" disabled onclick="goTo(2)">Continuer →</button>
   </div>
 
-  <!-- SCREEN 2 : PHOTO -->
   <div class="screen" id="s2">
-    <div class="progress">
-      <div class="progress-seg done"></div><div class="progress-seg active"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-    </div>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
     <div class="step-label">Étape 2 / 6</div>
     <h1 class="screen-title">Uploadez une photo de votre pièce</h1>
     <p class="screen-sub">L'IA analysera votre espace pour des recommandations ultra-personnalisées.</p>
@@ -263,13 +152,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn2" disabled onclick="goTo(3)">Analyser ma pièce →</button>
   </div>
 
-  <!-- SCREEN 3 : BUDGET -->
   <div class="screen" id="s3">
-    <div class="progress">
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg active"></div><div class="progress-seg"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-    </div>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
     <div class="step-label">Étape 3 / 6</div>
     <h1 class="screen-title">Quel est votre budget ?</h1>
     <p class="screen-sub">Nous trouverons les meilleurs produits dans cette fourchette.</p>
@@ -282,13 +166,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn3" disabled onclick="goTo(4)">Continuer →</button>
   </div>
 
-  <!-- SCREEN 4 : STYLE -->
   <div class="screen" id="s4">
-    <div class="progress">
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg done"></div><div class="progress-seg active"></div>
-      <div class="progress-seg"></div><div class="progress-seg"></div>
-    </div>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
     <div class="step-label">Étape 4 / 6</div>
     <h1 class="screen-title">Quel style vous attire ?</h1>
     <p class="screen-sub">L'ambiance de votre future pièce.</p>
@@ -302,13 +181,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn4" disabled onclick="goTo(5)">Continuer →</button>
   </div>
 
-  <!-- SCREEN 5 : CHAT IA -->
   <div class="screen" id="s5">
-    <div class="progress">
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg active"></div><div class="progress-seg"></div>
-    </div>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div></div>
     <div class="step-label">Étape 5 / 6</div>
     <h1 class="screen-title">Affinons votre projet</h1>
     <p class="screen-sub">Je vous pose quelques questions pour personnaliser votre plan au maximum.</p>
@@ -322,13 +196,8 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn5" style="display:none;" onclick="goTo(6)">Voir mes produits →</button>
   </div>
 
-  <!-- SCREEN 6 : RÉSULTATS -->
   <div class="screen" id="s6">
-    <div class="progress">
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg done"></div><div class="progress-seg done"></div>
-      <div class="progress-seg done"></div><div class="progress-seg active"></div>
-    </div>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div></div>
     <div id="result-hero" class="result-hero"></div>
     <h1 class="screen-title" id="result-title"></h1>
     <p class="screen-sub" id="result-sub"></p>
@@ -337,7 +206,7 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
       <span class="cart-total" id="cart-total">0,00 €</span>
     </div>
     <div id="products-list"></div>
-    <button class="btn-order" id="btn-order" onclick="alert('Fonctionnalité de commande bientôt disponible ! Renovom arrive très vite.')">Commander tout le panier →</button>
+    <button class="btn-order" id="btn-order" onclick="alert('Commande bientôt disponible !')">Commander tout le panier →</button>
   </div>
 
 </div>
@@ -383,11 +252,11 @@ let chatHistory = [];
 function initChat() {
   document.getElementById('chat-messages').innerHTML = '';
   chatHistory = [];
-  setTimeout(() => callAI("Démarre la conversation en analysant la pièce et posant ta première question."), 500);
+  setTimeout(() => callAI("Démarre la conversation."), 500);
 }
 
 async function callAI(userMessage) {
-  if(userMessage !== "Démarre la conversation en analysant la pièce et posant ta première question.") {
+  if(userMessage !== "Démarre la conversation.") {
     chatHistory.push({ role: 'user', content: userMessage });
   }
   addTyping();
@@ -418,21 +287,24 @@ async function callAI(userMessage) {
 function addAI(text) {
   const area = document.getElementById('chat-messages');
   const d = document.createElement('div'); d.className = 'msg ai';
-  d.innerHTML = `<div class="ai-av">R</div><div class="bubble">${text}</div>`;
+  d.innerHTML = '<div class="ai-av">R</div><div class="bubble">'+text+'</div>';
   area.appendChild(d); area.scrollTop = area.scrollHeight;
 }
+
 function addUser(text) {
   const area = document.getElementById('chat-messages');
   const d = document.createElement('div'); d.className = 'msg user';
-  d.innerHTML = `<div class="bubble">${text}</div>`;
+  d.innerHTML = '<div class="bubble">'+text+'</div>';
   area.appendChild(d); area.scrollTop = area.scrollHeight;
 }
+
 function addTyping() {
   const area = document.getElementById('chat-messages');
   const d = document.createElement('div'); d.className = 'msg ai'; d.id = 'typing';
-  d.innerHTML = `<div class="ai-av">R</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  d.innerHTML = '<div class="ai-av">R</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
   area.appendChild(d); area.scrollTop = area.scrollHeight;
 }
+
 function sendMsg() {
   const inp = document.getElementById('chat-input');
   const val = inp.value.trim(); if(!val) return;
@@ -481,29 +353,18 @@ const db = {
 
 function showResults() {
   const prods = db[state.room] || db['Salon'];
-  document.getElementById('result-title').textContent = `Votre ${state.room} style ${state.style}`;
-  document.getElementById('result-sub').textContent = `Budget ${state.budget} · Meilleurs prix sélectionnés en ligne`;
-
+  document.getElementById('result-title').textContent = 'Votre '+state.room+' style '+state.style;
+  document.getElementById('result-sub').textContent = 'Budget '+state.budget+' · Meilleurs prix sélectionnés en ligne';
   const hero = document.getElementById('result-hero');
   if(state.photo) {
-    hero.innerHTML = `<img src="${state.photo}" class="result-photo" /><div class="result-overlay"><div class="result-badge">Analysé par Renovom ✓</div><div class="result-title">Style ${state.style}</div></div>`;
+    hero.innerHTML = '<img src="'+state.photo+'" class="result-photo" /><div class="result-overlay"><div class="result-badge">Analysé par Renovom ✓</div><div class="result-title">Style '+state.style+'</div></div>';
   } else {
-    hero.innerHTML = `<div class="result-placeholder"><div class="result-badge">Votre plan personnalisé</div><div class="result-title">${state.room} · Style ${state.style}</div></div>`;
+    hero.innerHTML = '<div class="result-placeholder"><div class="result-badge">Votre plan personnalisé</div><div class="result-title">'+state.room+' · Style '+state.style+'</div></div>';
   }
-
   const list = document.getElementById('products-list'); list.innerHTML = '';
-  prods.forEach((p,i) => {
+  prods.forEach(function(p,i) {
     const d = document.createElement('div'); d.className = 'product-card-full';
-    d.innerHTML = `
-      <div class="prod-img" style="background:${p.bg}">${p.icon}</div>
-      <div class="prod-info">
-        <div class="prod-store">${p.store} · Meilleur prix</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-ref">${p.ref}</div>
-        <div class="prod-price">${p.price.toFixed(2).replace('.',',')} €</div>
-        <div class="prod-delivery">✓ ${p.delivery}</div>
-        <button class="btn-add-cart" id="cb${i}" onclick="addCart(${i},'${p.name.replace(/'/g,"\\'")}',${p.price})">+ Ajouter au panier</button>
-      </div>`;
+    d.innerHTML = '<div class="prod-img" style="background:'+p.bg+'">'+p.icon+'</div><div class="prod-info"><div class="prod-store">'+p.store+' · Meilleur prix</div><div class="prod-name">'+p.name+'</div><div class="prod-ref">'+p.ref+'</div><div class="prod-price">'+p.price.toFixed(2).replace('.',',')+'€</div><div class="prod-delivery">✓ '+p.delivery+'</div><button class="btn-add-cart" id="cb'+i+'" onclick="addCart('+i+',\''+p.name.replace(/'/g,"\\'")+"',"+p.price+')">+ Ajouter au panier</button></div>';
     list.appendChild(d);
   });
 }
@@ -515,10 +376,9 @@ function addCart(i, name, price) {
   state.cart.push(name);
   const btn = document.getElementById('cb'+i);
   btn.textContent = '✓ Ajouté'; btn.classList.add('added'); btn.disabled = true;
-  const bar = document.getElementById('cart-bar');
-  bar.style.display = 'flex';
-  document.getElementById('cart-info').textContent = state.cart.length + ' produit'+(state.cart.length>1?'s':'')+' dans le panier';
-  document.getElementById('cart-total').textContent = state.total.toFixed(2).replace('.',',') + ' €';
+  document.getElementById('cart-bar').style.display = 'flex';
+  document.getElementById('cart-info').textContent = state.cart.length+' produit'+(state.cart.length>1?'s':'')+' dans le panier';
+  document.getElementById('cart-total').textContent = state.total.toFixed(2).replace('.',',')+' €';
   document.getElementById('btn-order').style.display = 'block';
 }
 </script>
