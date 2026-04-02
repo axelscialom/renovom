@@ -1,0 +1,34 @@
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { messages, room, budget, style } = req.body;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Tu es un designer d'intérieur expert pour Renovom. 
+        L'utilisateur veut rénover sa ${room} avec un budget ${budget} en style ${style}.
+        Pose des questions courtes et pertinentes pour affiner le projet.
+        Réponds toujours en français, de façon chaleureuse et professionnelle.
+        Maximum 2-3 phrases par réponse.`,
+        messages: messages
+      })
+    });
+
+    const data = await response.json();
+    res.status(200).json({ reply: data.content[0].text });
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+}
