@@ -6,8 +6,8 @@ export default async function handler(req, res) {
   try {
     const { messages, room, budget, style } = req.body;
 
-    const isFirstMessage = !messages || messages.length === 0;
-
+    const isFirstMessage = true;
+    
     const systemPrompt = `Tu es un designer intérieur expert et chaleureux pour Renovom.
 L'utilisateur veut rénover sa ${room} avec un budget ${budget} en style ${style}.
 
