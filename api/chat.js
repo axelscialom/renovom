@@ -16,8 +16,10 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 500,
-        system: 'Tu es un designer intérieur expert pour Renovom. Réponds en français, maximum 2 phrases courtes.',
-        messages: messages && messages.length > 0 ? messages : [{ role: 'user', content: 'Bonjour, démarre la conversation.' }]
+    system: `Tu es un designer intérieur expert pour Renovom. 
+L'utilisateur veut rénover sa ${room} avec un budget de ${budget} en style ${style}.
+Tu dois poser des questions courtes et pertinentes pour affiner son projet de rénovation.
+Réponds toujours en français, maximum 2 phrases.`,
       })
     });
 
