@@ -385,18 +385,47 @@ const chatFlow = [
   () => `Avez-vous des contraintes particulières ? Locataire, copropriété, travaux limités ?`,
   () => `Merci pour toutes ces informations ! J'ai analysé votre espace et composé une sélection de produits personnalisée. Cliquez ci-dessous pour découvrir votre plan complet.`,
 ];
-let step = 0;
+let chatHistory = [];
 
 function initChat() {
   document.getElementById('chat-messages').innerHTML = '';
-  step = 0;
-  setTimeout(() => addAI(chatFlow[0]()), 500);
+  chatHistory = [];
+  setTimeout(() => callAI("Démarre la conversation en analysant la pièce et posant ta première question."), 500);
 }
 
-function addAI(html) {
+async function callAI(userMessage) {
+  if(userMessage !== "Démarre la conversation en analysant la pièce et posant ta première question.") {
+    chatHistory.push({ role: 'user', content: userMessage });
+  }
+  addTyping();
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: chatHistory.length > 0 ? chatHistory : [{ role: 'user', content: userMessage }],
+        room: state.room,
+        budget: state.budget,
+        style: state.style
+      })
+    });
+    const data = await res.json();
+    document.getElementById('typing')?.remove();
+    addAI(data.reply);
+    chatHistory.push({ role: 'assistant', content: data.reply });
+    if(chatHistory.length >= 8) {
+      setTimeout(() => { document.getElementById('btn5').style.display = 'block'; }, 300);
+    }
+  } catch(e) {
+    document.getElementById('typing')?.remove();
+    addAI("Désolé, une erreur est survenue. Réessayez !");
+  }
+}
+
+function addAI(text) {
   const area = document.getElementById('chat-messages');
   const d = document.createElement('div'); d.className = 'msg ai';
-  d.innerHTML = `<div class="ai-av">R</div><div class="bubble">${html}</div>`;
+  d.innerHTML = `<div class="ai-av">R</div><div class="bubble">${text}</div>`;
   area.appendChild(d); area.scrollTop = area.scrollHeight;
 }
 function addUser(text) {
@@ -414,15 +443,9 @@ function addTyping() {
 function sendMsg() {
   const inp = document.getElementById('chat-input');
   const val = inp.value.trim(); if(!val) return;
-  addUser(val); inp.value = ''; step++;
-  addTyping();
-  setTimeout(() => {
-    document.getElementById('typing')?.remove();
-    if(step < chatFlow.length) {
-      addAI(chatFlow[step]());
-      if(step === chatFlow.length - 1) {
-        setTimeout(() => { document.getElementById('btn5').style.display = 'block'; }, 300);
-      }
+  addUser(val); inp.value = '';
+  callAI(val);
+}
     }
   }, 1000);
 }
