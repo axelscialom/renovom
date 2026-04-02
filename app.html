@@ -378,13 +378,6 @@ function goTo(n) {
   if(n===6) showResults();
 }
 
-const chatFlow = [
-  () => `Parfait ! J'ai bien reçu la photo de votre <strong>${state.room}</strong>...`,
-  () => `Compris. Y a-t-il des éléments...`,
-  () => `Quelle est la luminosité...`,
-  () => `Avez-vous des contraintes...`,
-  () => `Merci pour toutes ces informations...`,
-];
 let chatHistory = [];
 
 function initChat() {
