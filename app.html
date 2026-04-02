@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renovom — Créez votre projet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --violet: #2D2680;
+  --violet-light: #4A42C8;
+  --violet-pale: #EEEDFE;
+  --cream: #FAF9F6;
+  --dark: #0F0E1A;
+  --gray: #6B6B80;
+  --gray-light: #E8E8F0;
+  --white: #FFFFFF;
+  --green: #0F6E56;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--cream); color: var(--dark); min-height: 100vh; }
+
+.app-nav {
+  padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  background: var(--white); border-bottom: 0.5px solid var(--gray-light);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--violet); text-decoration: none; }
+.nav-logo span { color: var(--violet-light); }
+.nav-step-info { font-size: 0.8rem; color: var(--gray); }
+
+.app-container { max-width: 680px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+.screen { display: none; animation: fadeIn 0.3s ease; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.progress { display: flex; gap: 5px; margin-bottom: 2.5rem; }
+.progress-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--gray-light); transition: background 0.3s; }
+.progress-seg.done { background: var(--violet); }
+.progress-seg.active { background: var(--violet-light); }
+
+.step-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet); margin-bottom: 0.5rem; }
+.screen-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; color: var(--dark); margin-bottom: 0.4rem; line-height: 1.2; }
+.screen-sub { font-size: 0.88rem; color: var(--gray); line-height: 1.6; margin-bottom: 2rem; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+
+.choice-card {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: 14px; padding: 1.1rem; cursor: pointer;
+  transition: all 0.15s; text-align: center;
+}
+.choice-card:hover { border-color: var(--violet-light); background: var(--violet-pale); }
+.choice-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
+.choice-card .cc-icon { font-size: 1.6rem; margin-bottom: 6px; }
+.choice-card .cc-label { font-size: 0.85rem; font-weight: 500; color: var(--dark); }
+
+.upload-zone {
+  border: 2px dashed var(--gray-light); border-radius: 16px;
+  padding: 3rem 1rem; text-align: center; cursor: pointer;
+  background: var(--white); transition: all 0.2s; position: relative;
+  margin-bottom: 2rem;
+}
+.upload-zone:hover { border-color: var(--violet-light); background: var(--violet-pale); }
+.upload-zone.has-photo { border-style: solid; border-color: var(--violet); padding: 0; overflow: hidden; }
+.upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+#photo-preview { width: 100%; max-height: 280px; object-fit: cover; display: none; border-radius: 14px; }
+.upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+.upload-title { font-size: 1rem; font-weight: 500; color: var(--dark); margin-bottom: 4px; }
+.upload-sub { font-size: 0.8rem; color: var(--gray); }
+.photo-badge {
+  position: absolute; bottom: 10px; right: 10px;
+  background: rgba(45,38,128,0.85); color: white;
+  font-size: 0.72rem; padding: 4px 12px; border-radius: 50px;
+  pointer-events: none; display: none;
+}
+
+.budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+.budget-card {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: 14px; padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.15s;
+}
+.budget-card:hover { border-color: var(--violet-light); }
+.budget-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
+.budget-amount { font-size: 1rem; font-weight: 500; color: var(--dark); }
+.budget-desc { font-size: 0.75rem; color: var(--gray); margin-top: 2px; }
+
+.style-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 2rem; }
+.style-card {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.15s;
+}
+.style-card:hover { border-color: var(--violet-light); }
+.style-card.selected { border: 2px solid var(--violet); }
+.style-thumb { height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+.style-name { font-size: 0.72rem; font-weight: 500; text-align: center; padding: 5px 4px 2px; color: var(--dark); }
+.style-mood { font-size: 0.62rem; text-align: center; color: var(--gray); padding: 0 4px 7px; line-height: 1.3; }
+
+.btn-primary {
+  background: var(--violet); color: var(--white);
+  border: none; border-radius: 50px; padding: 0.85rem 2rem;
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+  cursor: pointer; width: 100%; transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--violet-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(45,38,128,0.25); }
+.btn-primary:disabled { background: var(--gray-light); color: var(--gray); cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* CHAT */
+.chat-wrap { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; }
+.chat-messages { padding: 1.2rem; display: flex; flex-direction: column; gap: 12px; max-height: 320px; overflow-y: auto; }
+.msg { display: flex; gap: 8px; align-items: flex-start; }
+.msg.ai .bubble {
+  background: var(--cream); border: 0.5px solid var(--gray-light);
+  border-radius: 4px 14px 14px 14px; padding: 10px 14px;
+  font-size: 0.85rem; color: var(--dark); line-height: 1.6; max-width: 88%;
+}
+.msg.user { justify-content: flex-end; }
+.msg.user .bubble {
+  background: var(--violet); color: white;
+  border-radius: 14px 4px 14px 14px; padding: 10px 14px;
+  font-size: 0.85rem; line-height: 1.6; max-width: 75%;
+}
+.ai-av {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--violet-pale); display: flex; align-items: center;
+  justify-content: center; font-size: 0.7rem; font-weight: 500;
+  color: var(--violet); flex-shrink: 0; margin-top: 2px;
+  font-family: var(--font-display);
+}
+.chat-input-row {
+  display: flex; gap: 8px; padding: 0.8rem 1rem;
+  border-top: 0.5px solid var(--gray-light);
+}
+.chat-input {
+  flex: 1; padding: 0.6rem 1rem; border: 1px solid var(--gray-light);
+  border-radius: 50px; font-size: 0.85rem; font-family: var(--font-body);
+  color: var(--dark); background: var(--cream); outline: none;
+}
+.chat-input:focus { border-color: var(--violet-light); }
+.chat-send {
+  background: var(--violet); color: white; border: none;
+  border-radius: 50px; padding: 0.6rem 1.1rem; font-size: 0.85rem;
+  cursor: pointer; transition: background 0.15s;
+}
+.chat-send:hover { background: var(--violet-light); }
+.typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+.typing-dots span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--gray);
+  animation: bounce 1s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce { 0%,60%,100%{ transform:translateY(0); } 30%{ transform:translateY(-5px); } }
+
+/* RESULTS */
+.result-hero { border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; position: relative; }
+.result-photo { width: 100%; max-height: 220px; object-fit: cover; display: block; filter: brightness(0.55); }
+.result-placeholder { height: 160px; background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+.result-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.result-badge { background: rgba(255,255,255,0.15); color: white; font-size: 0.75rem; padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); }
+.result-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; color: white; }
+
+.cart-bar {
+  background: var(--violet-pale); border: 1px solid rgba(45,38,128,0.2);
+  border-radius: 12px; padding: 0.9rem 1.2rem;
+  display: none; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.cart-info { font-size: 0.85rem; font-weight: 500; color: var(--violet); }
+.cart-total { font-size: 1rem; font-weight: 500; color: var(--dark); }
+
+.product-card-full {
+  background: var(--white); border: 1px solid var(--gray-light);
+  border-radius: 14px; padding: 1rem; display: flex; gap: 12px;
+  margin-bottom: 10px; transition: all 0.15s;
+}
+.product-card-full:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+.prod-img { width: 70px; height: 70px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+.prod-info { flex: 1; min-width: 0; }
+.prod-store { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+.prod-name { font-size: 0.88rem; font-weight: 500; color: var(--dark); margin-top: 2px; line-height: 1.3; }
+.prod-ref { font-size: 0.72rem; color: var(--gray); margin-top: 1px; }
+.prod-price { font-size: 1rem; font-weight: 500; color: var(--violet); margin-top: 4px; }
+.prod-delivery { font-size: 0.72rem; color: var(--green); margin-top: 1px; }
+.btn-add-cart {
+  background: var(--violet); color: white; border: none;
+  border-radius: 50px; padding: 5px 14px; font-size: 0.75rem;
+  font-weight: 500; cursor: pointer; margin-top: 8px; transition: background 0.15s;
+  white-space: nowrap;
+}
+.btn-add-cart:hover { background: var(--violet-light); }
+.btn-add-cart.added { background: var(--green); }
+
+.btn-order {
+  background: var(--violet); color: white; border: none; border-radius: 50px;
+  padding: 0.9rem 2rem; font-family: var(--font-body); font-size: 0.9rem;
+  font-weight: 500; cursor: pointer; width: 100%; margin-top: 1rem;
+  display: none; transition: all 0.2s;
+}
+.btn-order:hover { background: var(--violet-light); transform: translateY(-1px); }
+
+@media (max-width: 600px) {
+  .style-grid { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="app-nav">
+  <a href="index.html" class="nav-logo">Renovom<span>.</span></a>
+  <div class="nav-step-info" id="nav-step">Étape 1 / 6</div>
+</nav>
+
+<div class="app-container">
+
+  <!-- SCREEN 1 : PIÈCE -->
+  <div class="screen active" id="s1">
+    <div class="progress">
+      <div class="progress-seg active"></div><div class="progress-seg"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+    </div>
+    <div class="step-label">Étape 1 / 6</div>
+    <h1 class="screen-title">Quelle pièce souhaitez-vous rénover ?</h1>
+    <p class="screen-sub">Nous adapterons chaque recommandation à votre espace.</p>
+    <div class="grid-2" id="room-grid">
+      <div class="choice-card" onclick="pick(this,'room','Cuisine')"><div class="cc-icon">🍳</div><div class="cc-label">Cuisine</div></div>
+      <div class="choice-card" onclick="pick(this,'room','Chambre')"><div class="cc-icon">🛏</div><div class="cc-label">Chambre</div></div>
+      <div class="choice-card" onclick="pick(this,'room','Salle de bain')"><div class="cc-icon">🚿</div><div class="cc-label">Salle de bain</div></div>
+      <div class="choice-card" onclick="pick(this,'room','Salon')"><div class="cc-icon">🛋</div><div class="cc-label">Salon</div></div>
+      <div class="choice-card" onclick="pick(this,'room','Bureau')"><div class="cc-icon">💻</div><div class="cc-label">Bureau</div></div>
+      <div class="choice-card" onclick="pick(this,'room','Entrée')"><div class="cc-icon">🚪</div><div class="cc-label">Entrée</div></div>
+    </div>
+    <button class="btn-primary" id="btn1" disabled onclick="goTo(2)">Continuer →</button>
+  </div>
+
+  <!-- SCREEN 2 : PHOTO -->
+  <div class="screen" id="s2">
+    <div class="progress">
+      <div class="progress-seg done"></div><div class="progress-seg active"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+    </div>
+    <div class="step-label">Étape 2 / 6</div>
+    <h1 class="screen-title">Uploadez une photo de votre pièce</h1>
+    <p class="screen-sub">L'IA analysera votre espace pour des recommandations ultra-personnalisées.</p>
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" accept="image/*" onchange="handlePhoto(event)" />
+      <div id="upload-placeholder">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">Glissez votre photo ici</div>
+        <div class="upload-sub">ou cliquez pour choisir · JPG, PNG, HEIC</div>
+      </div>
+      <img id="photo-preview" />
+      <div class="photo-badge" id="photo-badge">Photo chargée ✓</div>
+    </div>
+    <button class="btn-primary" id="btn2" disabled onclick="goTo(3)">Analyser ma pièce →</button>
+  </div>
+
+  <!-- SCREEN 3 : BUDGET -->
+  <div class="screen" id="s3">
+    <div class="progress">
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg active"></div><div class="progress-seg"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+    </div>
+    <div class="step-label">Étape 3 / 6</div>
+    <h1 class="screen-title">Quel est votre budget ?</h1>
+    <p class="screen-sub">Nous trouverons les meilleurs produits dans cette fourchette.</p>
+    <div class="budget-grid" id="budget-grid">
+      <div class="budget-card" onclick="pick(this,'budget','Moins de 500€')"><div class="budget-amount">− 500 €</div><div class="budget-desc">Rafraîchissement léger</div></div>
+      <div class="budget-card" onclick="pick(this,'budget','500 – 1 500€')"><div class="budget-amount">500 – 1 500 €</div><div class="budget-desc">Rénovation partielle</div></div>
+      <div class="budget-card" onclick="pick(this,'budget','1 500 – 5 000€')"><div class="budget-amount">1 500 – 5 000 €</div><div class="budget-desc">Rénovation complète</div></div>
+      <div class="budget-card" onclick="pick(this,'budget','+ 5 000€')"><div class="budget-amount">+ 5 000 €</div><div class="budget-desc">Projet ambitieux</div></div>
+    </div>
+    <button class="btn-primary" id="btn3" disabled onclick="goTo(4)">Continuer →</button>
+  </div>
+
+  <!-- SCREEN 4 : STYLE -->
+  <div class="screen" id="s4">
+    <div class="progress">
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg done"></div><div class="progress-seg active"></div>
+      <div class="progress-seg"></div><div class="progress-seg"></div>
+    </div>
+    <div class="step-label">Étape 4 / 6</div>
+    <h1 class="screen-title">Quel style vous attire ?</h1>
+    <p class="screen-sub">L'ambiance de votre future pièce.</p>
+    <div class="style-grid" id="style-grid">
+      <div class="style-card" onclick="pick(this,'style','Scandinave')"><div class="style-thumb" style="background:#F1EFE8;">🪵</div><div class="style-name">Scandinave</div><div class="style-mood">Bois · Blanc · Épuré</div></div>
+      <div class="style-card" onclick="pick(this,'style','Industriel')"><div class="style-thumb" style="background:#2A2A2A;">⚙️</div><div class="style-name">Industriel</div><div class="style-mood">Métal · Béton · Brut</div></div>
+      <div class="style-card" onclick="pick(this,'style','Bohème')"><div class="style-thumb" style="background:#FAEEDA;">🪴</div><div class="style-name">Bohème</div><div class="style-mood">Rotin · Chaud</div></div>
+      <div class="style-card" onclick="pick(this,'style','Vintage')"><div class="style-thumb" style="background:#FAECE7;">🪑</div><div class="style-name">Vintage</div><div class="style-mood">Rétro · Patine</div></div>
+      <div class="style-card" onclick="pick(this,'style','Contemporain')"><div class="style-thumb" style="background:#1A1A2E;">◼</div><div class="style-name">Contemporain</div><div class="style-mood">Luxe · Net</div></div>
+    </div>
+    <button class="btn-primary" id="btn4" disabled onclick="goTo(5)">Continuer →</button>
+  </div>
+
+  <!-- SCREEN 5 : CHAT IA -->
+  <div class="screen" id="s5">
+    <div class="progress">
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg active"></div><div class="progress-seg"></div>
+    </div>
+    <div class="step-label">Étape 5 / 6</div>
+    <h1 class="screen-title">Affinons votre projet</h1>
+    <p class="screen-sub">Je vous pose quelques questions pour personnaliser votre plan au maximum.</p>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" placeholder="Votre réponse..." onkeydown="if(event.key==='Enter')sendMsg()" />
+        <button class="chat-send" onclick="sendMsg()">→</button>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn5" style="display:none;" onclick="goTo(6)">Voir mes produits →</button>
+  </div>
+
+  <!-- SCREEN 6 : RÉSULTATS -->
+  <div class="screen" id="s6">
+    <div class="progress">
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg done"></div><div class="progress-seg done"></div>
+      <div class="progress-seg done"></div><div class="progress-seg active"></div>
+    </div>
+    <div id="result-hero" class="result-hero"></div>
+    <h1 class="screen-title" id="result-title"></h1>
+    <p class="screen-sub" id="result-sub"></p>
+    <div class="cart-bar" id="cart-bar">
+      <span class="cart-info" id="cart-info">0 produit dans le panier</span>
+      <span class="cart-total" id="cart-total">0,00 €</span>
+    </div>
+    <div id="products-list"></div>
+    <button class="btn-order" id="btn-order" onclick="alert('Fonctionnalité de commande bientôt disponible ! Renovom arrive très vite.')">Commander tout le panier →</button>
+  </div>
+
+</div>
+
+<script>
+const state = { room:'', budget:'', style:'', photo:null, cart:[], total:0 };
+const added = new Set();
+
+function pick(el, key, val) {
+  el.parentElement.querySelectorAll('.choice-card,.budget-card,.style-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[key] = val;
+  const map = {room:'btn1',budget:'btn3',style:'btn4'};
+  if(map[key]) document.getElementById(map[key]).disabled = false;
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    state.photo = ev.target.result;
+    document.getElementById('photo-preview').src = ev.target.result;
+    document.getElementById('photo-preview').style.display = 'block';
+    document.getElementById('upload-placeholder').style.display = 'none';
+    document.getElementById('photo-badge').style.display = 'block';
+    document.getElementById('upload-zone').classList.add('has-photo');
+    document.getElementById('btn2').disabled = false;
+  };
+  r.readAsDataURL(file);
+}
+
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  document.getElementById('nav-step').textContent = 'Étape '+n+' / 6';
+  window.scrollTo(0,0);
+  if(n===5) initChat();
+  if(n===6) showResults();
+}
+
+const chatFlow = [
+  () => `Parfait ! J'ai bien reçu la photo de votre <strong>${state.room}</strong>. Je prépare votre plan <strong>${state.style}</strong> dans un budget <strong>${state.budget}</strong>.<br><br>Première question : qu'est-ce qui vous déplaît le plus dans cette pièce actuellement ?`,
+  () => `Compris. Y a-t-il des éléments que vous souhaitez absolument conserver — meubles, matériaux, luminaires ?`,
+  () => `Quelle est la luminosité naturelle de la pièce ? Beaucoup de fenêtres, peu, orientée Nord ou Sud ?`,
+  () => `Avez-vous des contraintes particulières ? Locataire, copropriété, travaux limités ?`,
+  () => `Merci pour toutes ces informations ! J'ai analysé votre espace et composé une sélection de produits personnalisée. Cliquez ci-dessous pour découvrir votre plan complet.`,
+];
+let step = 0;
+
+function initChat() {
+  document.getElementById('chat-messages').innerHTML = '';
+  step = 0;
+  setTimeout(() => addAI(chatFlow[0]()), 500);
+}
+
+function addAI(html) {
+  const area = document.getElementById('chat-messages');
+  const d = document.createElement('div'); d.className = 'msg ai';
+  d.innerHTML = `<div class="ai-av">R</div><div class="bubble">${html}</div>`;
+  area.appendChild(d); area.scrollTop = area.scrollHeight;
+}
+function addUser(text) {
+  const area = document.getElementById('chat-messages');
+  const d = document.createElement('div'); d.className = 'msg user';
+  d.innerHTML = `<div class="bubble">${text}</div>`;
+  area.appendChild(d); area.scrollTop = area.scrollHeight;
+}
+function addTyping() {
+  const area = document.getElementById('chat-messages');
+  const d = document.createElement('div'); d.className = 'msg ai'; d.id = 'typing';
+  d.innerHTML = `<div class="ai-av">R</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  area.appendChild(d); area.scrollTop = area.scrollHeight;
+}
+function sendMsg() {
+  const inp = document.getElementById('chat-input');
+  const val = inp.value.trim(); if(!val) return;
+  addUser(val); inp.value = ''; step++;
+  addTyping();
+  setTimeout(() => {
+    document.getElementById('typing')?.remove();
+    if(step < chatFlow.length) {
+      addAI(chatFlow[step]());
+      if(step === chatFlow.length - 1) {
+        setTimeout(() => { document.getElementById('btn5').style.display = 'block'; }, 300);
+      }
+    }
+  }, 1000);
+}
+
+const db = {
+  'Cuisine': [
+    {icon:'🎨',bg:'#F5F0E8',store:'Leroy Merlin',name:'Peinture mat cuisine — Blanc Craie 2.5L',ref:'Dulux Valentine Crème de Couleur',price:28.90,delivery:'Livraison gratuite sous 48h'},
+    {icon:'💡',bg:'#FAEEDA',store:'Leroy Merlin',name:'Suspension LED bois naturel Ø30cm',ref:'Eglo Vintage Santander',price:49.90,delivery:'Livraison gratuite sous 72h'},
+    {icon:'🚿',bg:'#E6F1FB',store:'Castorama',name:'Mitigeur cuisine chromé pivotant',ref:'Hansgrohe Focus 31815000',price:89.00,delivery:'Livraison en 3–5 jours ouvrés'},
+    {icon:'🪑',bg:'#F1EFE8',store:'IKEA',name:'Tabouret de bar chêne clair H75cm',ref:'IKEA FRANKLIN naturel',price:34.99,delivery:'Click & Collect dès demain'},
+  ],
+  'Chambre': [
+    {icon:'🎨',bg:'#E6F1FB',store:'Leroy Merlin',name:'Peinture velours Bleu Nuit Doux 2.5L',ref:'V33 Ambiance Cocooning',price:32.50,delivery:'Livraison gratuite sous 48h'},
+    {icon:'🛏',bg:'#D3D1C7',store:'Cdiscount',name:'Tête de lit capitonnée velours gris 160cm',ref:'Atmosphera Cassiopée',price:79.99,delivery:'Livraison sous 5 jours'},
+    {icon:'💡',bg:'#FAEEDA',store:'Maisons du Monde',name:'Lampe chevet marbre & métal doré',ref:'Maisons du Monde Bianca',price:44.90,delivery:'Livraison gratuite sous 72h'},
+    {icon:'🪞',bg:'#F1EFE8',store:'IKEA',name:'Miroir rond bords dorés Ø60cm',ref:'IKEA LINDBYN or',price:29.99,delivery:'Click & Collect dès demain'},
+  ],
+  'Salon': [
+    {icon:'🎨',bg:'#FAECE7',store:'Leroy Merlin',name:'Peinture lin naturel Terracotta doux',ref:'Farrow & Ball Potted Shrimp',price:42.00,delivery:'Livraison gratuite sous 48h'},
+    {icon:'🛋',bg:'#E1F5EE',store:'La Redoute',name:'Canapé 3 places velours côtelé sage',ref:'La Redoute Interieurs Covy',price:699.00,delivery:'Livraison sous 10 jours'},
+    {icon:'💡',bg:'#FAEEDA',store:'IKEA',name:'Lampadaire laiton brossé 150cm',ref:'IKEA RANARP laiton',price:59.99,delivery:'Click & Collect dès demain'},
+    {icon:'🪴',bg:'#F1EFE8',store:'Maisons du Monde',name:'Cache-pot céramique blanc mat Ø22cm',ref:'Maisons du Monde Lagom',price:19.90,delivery:'Livraison gratuite sous 72h'},
+  ],
+  'Salle de bain': [
+    {icon:'🎨',bg:'#E6F1FB',store:'Leroy Merlin',name:'Peinture salle de bain anti-humidité Blanc Satin',ref:'Tollens Résistance+',price:24.90,delivery:'Livraison gratuite sous 48h'},
+    {icon:'🪞',bg:'#F1EFE8',store:'Castorama',name:'Miroir LED anti-buée 60x80cm',ref:'Allibert Baho',price:119.00,delivery:'Livraison en 5 jours'},
+    {icon:'🚿',bg:'#E1F5EE',store:'Leroy Merlin',name:'Colonne de douche thermostatique',ref:'Grohe Euphoria 260',price:249.00,delivery:'Livraison sous 7 jours'},
+    {icon:'🪣',bg:'#FAEEDA',store:'IKEA',name:'Meuble sous-vasque bambou 2 tiroirs',ref:'IKEA GODMORGON',price:89.99,delivery:'Click & Collect dès demain'},
+  ],
+  'Bureau': [
+    {icon:'🎨',bg:'#EEEDFE',store:'Leroy Merlin',name:'Peinture mate Gris Ardoise 2.5L',ref:'Dulux Valentine Color Resist',price:31.90,delivery:'Livraison gratuite sous 48h'},
+    {icon:'🖥',bg:'#E6F1FB',store:'IKEA',name:'Bureau réglable en hauteur 160x80cm',ref:'IKEA BEKANT blanc',price:349.00,delivery:'Livraison sous 7 jours'},
+    {icon:'💡',bg:'#FAEEDA',store:'Maisons du Monde',name:'Lampe de bureau architecte noir mat',ref:'Maisons du Monde Orson',price:69.90,delivery:'Livraison gratuite sous 72h'},
+    {icon:'🪴',bg:'#E1F5EE',store:'Leroy Merlin',name:'Étagère murale chêne 80cm x3',ref:'Lapeyre Naturel',price:45.00,delivery:'Click & Collect dès demain'},
+  ],
+  'Entrée': [
+    {icon:'🎨',bg:'#FAECE7',store:'Leroy Merlin',name:'Peinture satin Beige Sable 2.5L',ref:'Dulux Valentine Satin',price:26.90,delivery:'Livraison gratuite sous 48h'},
+    {icon:'🪞',bg:'#F1EFE8',store:'IKEA',name:'Miroir plein pied avec rangement',ref:'IKEA HEMNES miroir',price:149.00,delivery:'Livraison sous 7 jours'},
+    {icon:'🚪',bg:'#E6F1FB',store:'Maisons du Monde',name:'Portemanteau bois et métal 5 crochets',ref:'Maisons du Monde Izmir',price:39.90,delivery:'Livraison gratuite sous 72h'},
+    {icon:'💡',bg:'#FAEEDA',store:'Leroy Merlin',name:'Applique murale LED détecteur',ref:'Philips Hue Appear',price:79.00,delivery:'Livraison sous 5 jours'},
+  ],
+};
+
+function showResults() {
+  const prods = db[state.room] || db['Salon'];
+  document.getElementById('result-title').textContent = `Votre ${state.room} style ${state.style}`;
+  document.getElementById('result-sub').textContent = `Budget ${state.budget} · Meilleurs prix sélectionnés en ligne`;
+
+  const hero = document.getElementById('result-hero');
+  if(state.photo) {
+    hero.innerHTML = `<img src="${state.photo}" class="result-photo" /><div class="result-overlay"><div class="result-badge">Analysé par Renovom ✓</div><div class="result-title">Style ${state.style}</div></div>`;
+  } else {
+    hero.innerHTML = `<div class="result-placeholder"><div class="result-badge">Votre plan personnalisé</div><div class="result-title">${state.room} · Style ${state.style}</div></div>`;
+  }
+
+  const list = document.getElementById('products-list'); list.innerHTML = '';
+  prods.forEach((p,i) => {
+    const d = document.createElement('div'); d.className = 'product-card-full';
+    d.innerHTML = `
+      <div class="prod-img" style="background:${p.bg}">${p.icon}</div>
+      <div class="prod-info">
+        <div class="prod-store">${p.store} · Meilleur prix</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-ref">${p.ref}</div>
+        <div class="prod-price">${p.price.toFixed(2).replace('.',',')} €</div>
+        <div class="prod-delivery">✓ ${p.delivery}</div>
+        <button class="btn-add-cart" id="cb${i}" onclick="addCart(${i},'${p.name.replace(/'/g,"\\'")}',${p.price})">+ Ajouter au panier</button>
+      </div>`;
+    list.appendChild(d);
+  });
+}
+
+function addCart(i, name, price) {
+  if(added.has(i)) return;
+  added.add(i);
+  state.total += price;
+  state.cart.push(name);
+  const btn = document.getElementById('cb'+i);
+  btn.textContent = '✓ Ajouté'; btn.classList.add('added'); btn.disabled = true;
+  const bar = document.getElementById('cart-bar');
+  bar.style.display = 'flex';
+  document.getElementById('cart-info').textContent = state.cart.length + ' produit'+(state.cart.length>1?'s':'')+' dans le panier';
+  document.getElementById('cart-total').textContent = state.total.toFixed(2).replace('.',',') + ' €';
+  document.getElementById('btn-order').style.display = 'block';
+}
+</script>
+</body>
+</html>

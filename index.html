@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Renovom — Rénove ton intérieur grâce à l'IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --violet: #2D2680;
+  --violet-light: #4A42C8;
+  --violet-pale: #EEEDFE;
+  --cream: #FAF9F6;
+  --dark: #0F0E1A;
+  --gray: #6B6B80;
+  --gray-light: #E8E8F0;
+  --white: #FFFFFF;
+  --green: #0F6E56;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.2rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,249,246,0.85); backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid rgba(45,38,128,0.1);
+}
+.nav-logo { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--violet); letter-spacing: -0.5px; }
+.nav-logo span { color: var(--violet-light); }
+.nav-cta {
+  background: var(--violet); color: var(--white);
+  border: none; border-radius: 50px; padding: 0.6rem 1.5rem;
+  font-family: var(--font-body); font-size: 0.85rem; font-weight: 500;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+  text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--violet-light); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 8rem 2rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(74,66,200,0.08) 0%, transparent 70%);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--violet-pale); color: var(--violet);
+  font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em;
+  padding: 0.4rem 1rem; border-radius: 50px;
+  border: 0.5px solid rgba(45,38,128,0.2);
+  margin-bottom: 1.5rem; position: relative; z-index: 1;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--violet-light); }
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 500; line-height: 1.1; letter-spacing: -1px;
+  color: var(--dark); max-width: 800px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 em { font-style: italic; color: var(--violet); }
+.hero-sub {
+  font-size: 1.05rem; color: var(--gray); line-height: 1.7;
+  max-width: 480px; margin: 1.5rem auto 0;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-actions {
+  display: flex; gap: 1rem; align-items: center; justify-content: center;
+  margin-top: 2.5rem; flex-wrap: wrap;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.btn-main {
+  background: var(--violet); color: var(--white);
+  border: none; border-radius: 50px; padding: 0.9rem 2rem;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-main:hover { background: var(--violet-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,38,128,0.25); }
+.btn-ghost {
+  background: transparent; color: var(--violet);
+  border: 1px solid rgba(45,38,128,0.3); border-radius: 50px;
+  padding: 0.9rem 2rem; font-family: var(--font-body); font-size: 0.95rem;
+  font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-ghost:hover { background: var(--violet-pale); border-color: var(--violet); }
+
+.hero-preview {
+  margin-top: 4rem; position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.4s ease both;
+  width: 100%; max-width: 860px;
+}
+.preview-window {
+  background: var(--white); border-radius: 16px;
+  border: 0.5px solid var(--gray-light);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+.preview-bar {
+  background: #F5F4F8; padding: 0.8rem 1rem;
+  display: flex; align-items: center; gap: 6px;
+  border-bottom: 0.5px solid var(--gray-light);
+}
+.preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+.preview-bar-url {
+  flex: 1; background: var(--white); border-radius: 6px;
+  padding: 4px 12px; font-size: 0.75rem; color: var(--gray);
+  margin: 0 0.5rem; text-align: center;
+}
+.preview-content { padding: 2rem; }
+.preview-steps { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+.preview-step { flex: 1; height: 4px; border-radius: 2px; background: var(--gray-light); }
+.preview-step.active { background: var(--violet); }
+.preview-step.done { background: var(--violet-light); }
+.preview-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; color: var(--dark); margin-bottom: 0.3rem; }
+.preview-sub { font-size: 0.8rem; color: var(--gray); margin-bottom: 1.2rem; }
+.preview-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.preview-card {
+  background: var(--cream); border: 0.5px solid var(--gray-light);
+  border-radius: 10px; padding: 0.8rem; text-align: center; cursor: pointer;
+  transition: all 0.15s;
+}
+.preview-card:hover, .preview-card.sel { border-color: var(--violet); background: var(--violet-pale); }
+.preview-card .pc-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.preview-card .pc-label { font-size: 0.75rem; font-weight: 500; color: var(--dark); }
+
+/* HOW IT WORKS */
+.section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+.section-tag {
+  display: inline-block; font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet);
+  margin-bottom: 0.8rem;
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500; line-height: 1.15; letter-spacing: -0.5px;
+  color: var(--dark); max-width: 600px; margin-bottom: 1rem;
+}
+.section-sub { font-size: 1rem; color: var(--gray); line-height: 1.7; max-width: 500px; margin-bottom: 3rem; }
+
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.step-card {
+  background: var(--white); border: 0.5px solid var(--gray-light);
+  border-radius: 16px; padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--violet-pale); color: var(--violet);
+  font-size: 0.8rem; font-weight: 500; display: flex;
+  align-items: center; justify-content: center; margin-bottom: 1rem;
+}
+.step-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+.step-title { font-size: 0.95rem; font-weight: 500; color: var(--dark); margin-bottom: 0.4rem; }
+.step-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.6; }
+
+/* STYLES SECTION */
+.styles-section { background: var(--dark); padding: 6rem 2rem; }
+.styles-inner { max-width: 1100px; margin: 0 auto; }
+.styles-section .section-tag { color: rgba(255,255,255,0.5); }
+.styles-section .section-title { color: var(--white); }
+.styles-section .section-sub { color: rgba(255,255,255,0.5); }
+.styles-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.style-card {
+  border-radius: 12px; overflow: hidden; cursor: pointer;
+  border: 1.5px solid transparent; transition: all 0.2s;
+}
+.style-card:hover { border-color: rgba(255,255,255,0.3); transform: scale(1.02); }
+.style-thumb { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+.style-info { padding: 0.7rem; background: rgba(255,255,255,0.05); }
+.style-name { font-size: 0.8rem; font-weight: 500; color: var(--white); margin-bottom: 2px; }
+.style-mood { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+
+/* PRODUCTS SECTION */
+.products-section { padding: 6rem 2rem; background: var(--cream); }
+.products-inner { max-width: 1100px; margin: 0 auto; }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 3rem; }
+.product-card {
+  background: var(--white); border: 0.5px solid var(--gray-light);
+  border-radius: 16px; overflow: hidden; transition: all 0.2s;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+.product-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+.product-body { padding: 1rem 1.2rem; }
+.product-store { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.product-name { font-size: 0.88rem; font-weight: 500; color: var(--dark); margin-bottom: 4px; line-height: 1.3; }
+.product-delivery { font-size: 0.72rem; color: var(--green); margin-bottom: 10px; }
+.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-size: 1.1rem; font-weight: 500; color: var(--violet); }
+.btn-cart {
+  background: var(--violet); color: var(--white);
+  border: none; border-radius: 50px; padding: 5px 14px;
+  font-size: 0.75rem; font-weight: 500; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-cart:hover { background: var(--violet-light); }
+
+/* CTA SECTION */
+.cta-section {
+  padding: 6rem 2rem; text-align: center;
+  background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%);
+}
+.cta-section .section-title { color: var(--white); margin: 0 auto 1rem; }
+.cta-section .section-sub { color: rgba(255,255,255,0.7); margin: 0 auto 2.5rem; }
+.btn-white {
+  background: var(--white); color: var(--violet);
+  border: none; border-radius: 50px; padding: 0.9rem 2.5rem;
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+/* FOOTER */
+footer {
+  padding: 2rem 2.5rem; display: flex; align-items: center;
+  justify-content: space-between; border-top: 0.5px solid var(--gray-light);
+  background: var(--cream);
+}
+.footer-logo { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: var(--violet); }
+.footer-copy { font-size: 0.78rem; color: var(--gray); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.2rem; }
+  .styles-grid { grid-template-columns: repeat(2, 1fr); }
+  .preview-cards { grid-template-columns: repeat(2, 1fr); }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Renovom<span>.</span></div>
+  <a href="app.html" class="nav-cta">Commencer gratuitement →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-tag">Powered by IA · Gratuit pour commencer</div>
+  <h1>Rénove ton intérieur,<br><em>guidé par l'IA</em></h1>
+  <p class="hero-sub">Une photo, un budget, un style. Renovom analyse ta pièce et te livre une liste de produits commandables en un clic.</p>
+  <div class="hero-actions">
+    <a href="app.html" class="btn-main">Rénover maintenant <span>→</span></a>
+    <a href="#how" class="btn-ghost">Comment ça marche</a>
+  </div>
+  <div class="hero-preview">
+    <div class="preview-window">
+      <div class="preview-bar">
+        <div class="preview-dot" style="background:#FF5F57"></div>
+        <div class="preview-dot" style="background:#FEBC2E"></div>
+        <div class="preview-dot" style="background:#28C840"></div>
+        <div class="preview-bar-url">renovom.fr</div>
+      </div>
+      <div class="preview-content">
+        <div class="preview-steps">
+          <div class="preview-step done"></div>
+          <div class="preview-step active"></div>
+          <div class="preview-step"></div>
+          <div class="preview-step"></div>
+          <div class="preview-step"></div>
+          <div class="preview-step"></div>
+        </div>
+        <div class="preview-title">Quelle pièce souhaitez-vous rénover ?</div>
+        <div class="preview-sub">Nous adapterons chaque recommandation à votre espace.</div>
+        <div class="preview-cards">
+          <div class="preview-card sel"><div class="pc-icon">🍳</div><div class="pc-label">Cuisine</div></div>
+          <div class="preview-card"><div class="pc-icon">🛏</div><div class="pc-label">Chambre</div></div>
+          <div class="preview-card"><div class="pc-icon">🚿</div><div class="pc-label">Salle de bain</div></div>
+          <div class="preview-card"><div class="pc-icon">🛋</div><div class="pc-label">Salon</div></div>
+          <div class="preview-card"><div class="pc-icon">💻</div><div class="pc-label">Bureau</div></div>
+          <div class="preview-card"><div class="pc-icon">🚪</div><div class="pc-label">Entrée</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how">
+  <div class="section-tag">Comment ça marche</div>
+  <h2 class="section-title">De la photo aux produits, en minutes</h2>
+  <p class="section-sub">Renovom fait le travail à ta place — tu choisis, on trouve.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-icon">📷</div>
+      <div class="step-title">Upload ta photo</div>
+      <div class="step-desc">Prends une photo de ta pièce actuelle. Notre IA analyse l'espace, la luminosité et les volumes.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-icon">💰</div>
+      <div class="step-title">Définis ton budget</div>
+      <div class="step-desc">De 500€ à plus de 5 000€ — on trouve les meilleurs produits dans ta fourchette.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-icon">🎨</div>
+      <div class="step-title">Choisis ton style</div>
+      <div class="step-desc">Scandinave, industriel, bohème, vintage ou contemporain — avec un aperçu visuel de chaque ambiance.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-icon">🤖</div>
+      <div class="step-title">L'IA te pose des questions</div>
+      <div class="step-desc">Elle affine le projet : couleur des murs, contraintes, luminosité, éléments à conserver.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-icon">🛒</div>
+      <div class="step-title">Commande en 1 clic</div>
+      <div class="step-desc">Tous les produits listés avec le meilleur prix trouvé chez Leroy Merlin, Ikea, Castorama et plus.</div>
+    </div>
+  </div>
+</section>
+
+<section class="styles-section">
+  <div class="styles-inner">
+    <div class="section-tag">Les styles</div>
+    <h2 class="section-title" style="color:white;">5 ambiances, infinies possibilités</h2>
+    <p class="section-sub">Chaque style est une direction claire pour transformer ton espace.</p>
+    <div class="styles-grid">
+      <div class="style-card">
+        <div class="style-thumb" style="background:#F1EFE8;">🪵</div>
+        <div class="style-info"><div class="style-name">Scandinave</div><div class="style-mood">Épuré · Bois · Blanc</div></div>
+      </div>
+      <div class="style-card">
+        <div class="style-thumb" style="background:#2A2A2A;">⚙️</div>
+        <div class="style-info"><div class="style-name">Industriel</div><div class="style-mood">Métal · Béton · Brut</div></div>
+      </div>
+      <div class="style-card">
+        <div class="style-thumb" style="background:#FAEEDA;">🪴</div>
+        <div class="style-info"><div class="style-name">Bohème</div><div class="style-mood">Rotin · Plantes · Chaud</div></div>
+      </div>
+      <div class="style-card">
+        <div class="style-thumb" style="background:#FAECE7;">🪑</div>
+        <div class="style-info"><div class="style-name">Vintage</div><div class="style-mood">Rétro · Patine · Charme</div></div>
+      </div>
+      <div class="style-card">
+        <div class="style-thumb" style="background:#1A1A2E;">◼</div>
+        <div class="style-info"><div class="style-name">Contemporain</div><div class="style-mood">Luxe · Net · Premium</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="products-section">
+  <div class="products-inner">
+    <div class="section-tag">Les produits</div>
+    <h2 class="section-title">Les meilleurs prix, trouvés pour toi</h2>
+    <p class="section-sub">Chaque produit est sélectionné et comparé en temps réel chez les grandes enseignes.</p>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img" style="background:#F5F0E8;">🎨</div>
+        <div class="product-body">
+          <div class="product-store">Leroy Merlin</div>
+          <div class="product-name">Peinture mat cuisine — Blanc Craie 2.5L</div>
+          <div class="product-delivery">✓ Livraison gratuite sous 48h</div>
+          <div class="product-footer">
+            <div class="product-price">28,90 €</div>
+            <button class="btn-cart">+ Panier</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#FAEEDA;">💡</div>
+        <div class="product-body">
+          <div class="product-store">Leroy Merlin</div>
+          <div class="product-name">Suspension LED bois naturel Ø30cm</div>
+          <div class="product-delivery">✓ Livraison gratuite sous 72h</div>
+          <div class="product-footer">
+            <div class="product-price">49,90 €</div>
+            <button class="btn-cart">+ Panier</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#E6F1FB;">🚿</div>
+        <div class="product-body">
+          <div class="product-store">Castorama</div>
+          <div class="product-name">Mitigeur cuisine chromé pivotant</div>
+          <div class="product-delivery">✓ Livraison en 3–5 jours ouvrés</div>
+          <div class="product-footer">
+            <div class="product-price">89,00 €</div>
+            <button class="btn-cart">+ Panier</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img" style="background:#F1EFE8;">🪑</div>
+        <div class="product-body">
+          <div class="product-store">IKEA</div>
+          <div class="product-name">Tabouret de bar chêne clair H75cm</div>
+          <div class="product-delivery">✓ Click & Collect dès demain</div>
+          <div class="product-footer">
+            <div class="product-price">34,99 €</div>
+            <button class="btn-cart">+ Panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2 class="section-title">Prêt à transformer ton intérieur ?</h2>
+  <p class="section-sub">Gratuit pour commencer. Aucune carte bancaire requise.</p>
+  <a href="app.html" class="btn-white">Commencer maintenant →</a>
+</section>
+
+<footer>
+  <div class="footer-logo">Renovom.</div>
+  <div class="footer-copy">© 2024 Renovom · renovom.fr · Tous droits réservés</div>
+</footer>
+
+</body>
+</html>
