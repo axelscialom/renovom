@@ -379,11 +379,11 @@ function goTo(n) {
 }
 
 const chatFlow = [
-  () => `Parfait ! J'ai bien reçu la photo de votre <strong>${state.room}</strong>. Je prépare votre plan <strong>${state.style}</strong> dans un budget <strong>${state.budget}</strong>.<br><br>Première question : qu'est-ce qui vous déplaît le plus dans cette pièce actuellement ?`,
-  () => `Compris. Y a-t-il des éléments que vous souhaitez absolument conserver — meubles, matériaux, luminaires ?`,
-  () => `Quelle est la luminosité naturelle de la pièce ? Beaucoup de fenêtres, peu, orientée Nord ou Sud ?`,
-  () => `Avez-vous des contraintes particulières ? Locataire, copropriété, travaux limités ?`,
-  () => `Merci pour toutes ces informations ! J'ai analysé votre espace et composé une sélection de produits personnalisée. Cliquez ci-dessous pour découvrir votre plan complet.`,
+  () => `Parfait ! J'ai bien reçu la photo de votre <strong>${state.room}</strong>...`,
+  () => `Compris. Y a-t-il des éléments...`,
+  () => `Quelle est la luminosité...`,
+  () => `Avez-vous des contraintes...`,
+  () => `Merci pour toutes ces informations...`,
 ];
 let chatHistory = [];
 
