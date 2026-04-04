@@ -26,38 +26,44 @@ export default async function handler(req, res) {
     const styleDesc = styleMap[style] || 'modern interior';
     const roomDesc = roomMap[room] || 'room';
 
-    // If photo uploaded, analyze room structure with GPT-4o-mini
+    // Optional: analyze room structure with GPT-4o-mini vision
+    // We use a strict 5s timeout so it never blocks DALL-E generation
     let roomContext = '';
     if (photo) {
       try {
+        const controller = new AbortController();
+        const visionTimeout = setTimeout(() => controller.abort(), 5000);
+
         const visionRes = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
+          signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
           },
           body: JSON.stringify({
             model: 'gpt-4o-mini',
-            max_tokens: 80,
+            max_tokens: 60,
             messages: [{
               role: 'user',
               content: [
                 { type: 'image_url', image_url: { url: photo, detail: 'low' } },
-                { type: 'text', text: 'Describe only: window positions, floor type, wall layout of this room. One sentence, English, factual only.' }
+                { type: 'text', text: 'One sentence, English only: window positions, floor type, wall layout.' }
               ]
             }]
           })
         });
+
+        clearTimeout(visionTimeout);
         const visionData = await visionRes.json();
         if (visionData.choices?.[0]?.message?.content) {
           roomContext = visionData.choices[0].message.content.trim();
         }
       } catch (e) {
-        // Continue without vision context
+        // Vision timed out or failed — continue without context
       }
     }
 
-    // Build a clean, DALL-E-safe prompt (English only, no user conversational text)
     const prompt = roomContext
       ? `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Room layout: ${roomContext}. Professional photography, natural lighting, no people.`
       : `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Professional photography, natural lighting, no people.`;
