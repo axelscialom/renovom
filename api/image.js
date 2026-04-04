@@ -26,14 +26,15 @@ export default async function handler(req, res) {
     const styleDesc = styleMap[style] || 'modern interior design';
     const roomDesc  = roomMap[room]   || 'room';
 
-    // Clean, minimal prompt — no dynamic user content to avoid validation errors
     const prompt = `Professional interior design photography of a beautifully renovated ${roomDesc}. Style: ${styleDesc}. Bright natural lighting, no people, photorealistic, high quality.`;
+
+    const apiKey = process.env.OPENAI_API_KEY || '';
 
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        'Authorization': `Bearer ${apiKey.trim()}`
       },
       body: JSON.stringify({
         model: 'dall-e-3',
@@ -47,7 +48,18 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (data.error) {
-      return res.status(500).json({ error: data.error.message });
+      // Return full diagnostic info so we can identify the exact issue
+      return res.status(500).json({
+        error: data.error.message,
+        _diag: {
+          errorType: data.error.type,
+          errorCode: data.error.code,
+          errorParam: data.error.param,
+          keyLength: apiKey.trim().length,
+          keyStart: apiKey.trim().slice(0, 7),
+          httpStatus: response.status
+        }
+      });
     }
 
     if (!data.data?.[0]?.url) {

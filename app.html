@@ -567,10 +567,11 @@ function showResults(dalleUrl, dalleError, products) {
     caption.textContent = 'Image générée par IA · Les produits ci-dessous reproduisent ce résultat chez vous.';
     hero.after(caption);
   } else if (dalleError) {
-    hero.innerHTML = `<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;">
+    const diagInfo = imageData._diag ? `<div style="font-size:0.65rem;opacity:0.7;margin-top:6px;font-family:monospace;">type:${imageData._diag.errorType} | code:${imageData._diag.errorCode} | key:${imageData._diag.keyStart}… (${imageData._diag.keyLength}c) | http:${imageData._diag.httpStatus}</div>` : '';
+    hero.innerHTML = `<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;padding:1.5rem;">
       <div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération DALL·E indisponible</div>
-      <div class="gen-text" style="font-size:0.85rem;padding:0 1.5rem;text-align:center;">${dalleError}</div>
-      <div class="gen-label" style="color:rgba(255,255,255,0.6);">Vérifiez OPENAI_API_KEY dans Vercel</div>
+      <div class="gen-text" style="font-size:0.82rem;padding:0 1rem;text-align:center;">${dalleError}</div>
+      ${diagInfo}
     </div>`;
   } else if (state.photo) {
     hero.innerHTML = `<img src="${state.photo}" class="result-photo" />
