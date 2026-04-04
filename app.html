@@ -107,6 +107,13 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .btn-add-cart.added { background: var(--green); }
 .btn-order { background: var(--violet); color: white; border: none; border-radius: 50px; padding: 0.9rem 2rem; font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; margin-top: 1rem; display: none; transition: all 0.2s; }
 .btn-order:hover { background: var(--violet-light); transform: translateY(-1px); }
+.result-generating { height: 240px; background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; border-radius: 16px; }
+.gen-spinner { width: 44px; height: 44px; border: 3px solid rgba(255,255,255,0.25); border-top-color: white; border-radius: 50%; animation: spin 0.85s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.gen-label { color: rgba(255,255,255,0.7); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.gen-text { color: white; font-family: var(--font-display); font-size: 1.1rem; text-align: center; padding: 0 1rem; }
+.dalle-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); color: white; font-size: 0.72rem; padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 6px; }
+.dalle-caption { font-size: 0.78rem; color: var(--gray); text-align: center; margin-top: 8px; margin-bottom: 1.5rem; font-style: italic; }
 </style>
 </head>
 <body>
@@ -193,7 +200,7 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
         <button class="chat-send" onclick="sendMsg()">→</button>
       </div>
     </div>
-    <button class="btn-primary" id="btn5" style="display:none;" onclick="goTo(6)">Voir mes produits →</button>
+    <button class="btn-primary" id="btn5" style="display:none;" onclick="goTo(6)">Générer ma pièce rénovée →</button>
   </div>
 
   <div class="screen" id="s6">
@@ -244,7 +251,7 @@ function goTo(n) {
   document.getElementById('nav-step').textContent = 'Étape '+n+' / 6';
   window.scrollTo(0,0);
   if(n===5) initChat();
-  if(n===6) showResults();
+  if(n===6) generateAndShowResults();
 }
 
 let chatHistory = [];
@@ -356,16 +363,53 @@ const db = {
   ],
 };
 
-function showResults() {
+async function generateAndShowResults() {
+  // Show step 6 immediately with loading state
+  const hero = document.getElementById('result-hero');
+  document.getElementById('result-title').textContent = '';
+  document.getElementById('result-sub').textContent = '';
+  document.getElementById('products-list').innerHTML = '';
+  hero.innerHTML = '<div class="result-generating"><div class="gen-label">DALL·E 3</div><div class="gen-spinner"></div><div class="gen-text">Génération de votre '+state.room+' style '+state.style+'…</div></div>';
+
+  // Collect user chat notes (skip the first seeded context message at index 0)
+  const userNotes = chatHistory
+    .filter((m, i) => m.role === 'user' && i > 0)
+    .map(m => m.content)
+    .slice(0, 3);
+
+  let dalleUrl = null;
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes })
+    });
+    const data = await res.json();
+    if(!data.error) dalleUrl = data.imageUrl;
+  } catch(e) { /* fallback to uploaded photo */ }
+
+  showResults(dalleUrl);
+}
+
+function showResults(dalleUrl) {
   const prods = db[state.room] || db['Salon'];
   document.getElementById('result-title').textContent = 'Votre '+state.room+' style '+state.style;
-  document.getElementById('result-sub').textContent = 'Budget '+state.budget+' · Meilleurs prix sélectionnés en ligne';
+  document.getElementById('result-sub').textContent = 'Budget '+state.budget+' · Produits sélectionnés pour cette visualisation';
   const hero = document.getElementById('result-hero');
-  if(state.photo) {
-    hero.innerHTML = '<img src="'+state.photo+'" class="result-photo" /><div class="result-overlay"><div class="result-badge">Analysé par Renovom ✓</div><div class="result-title">Style '+state.style+'</div></div>';
+  const displayImg = dalleUrl || state.photo;
+
+  if(dalleUrl) {
+    hero.innerHTML = '<img src="'+dalleUrl+'" class="result-photo" style="filter:none;" /><div class="result-overlay"><div class="dalle-badge">✦ Visualisation générée par DALL·E 3</div><div class="result-title">Style '+state.style+'</div></div>';
+    const caption = document.createElement('p');
+    caption.className = 'dalle-caption';
+    caption.textContent = 'Image générée par IA — les produits ci-dessous permettent d\'obtenir ce résultat.';
+    hero.after(caption);
+  } else if(state.photo) {
+    hero.innerHTML = '<img src="'+state.photo+'" class="result-photo" /><div class="result-overlay"><div class="result-badge">Votre pièce actuelle</div><div class="result-title">Projet '+state.style+'</div></div>';
   } else {
     hero.innerHTML = '<div class="result-placeholder"><div class="result-badge">Votre plan personnalisé</div><div class="result-title">'+state.room+' · Style '+state.style+'</div></div>';
   }
+
   const list = document.getElementById('products-list'); list.innerHTML = '';
   prods.forEach(function(p,i) {
     const d = document.createElement('div'); d.className = 'product-card-full';
