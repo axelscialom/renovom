@@ -57,7 +57,12 @@ export default async function handler(req, res) {
         clearTimeout(visionTimeout);
         const visionData = await visionRes.json();
         if (visionData.choices?.[0]?.message?.content) {
-          roomContext = visionData.choices[0].message.content.trim();
+          // Sanitize: keep only printable ASCII to avoid DALL-E prompt validation errors
+          roomContext = visionData.choices[0].message.content
+            .replace(/[^\x20-\x7E]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 200);
         }
       } catch (e) {
         // Vision timed out or failed — continue without context
