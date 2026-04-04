@@ -363,6 +363,24 @@ const db = {
   ],
 };
 
+function compressPhoto(dataUrl) {
+  return new Promise(resolve => {
+    if(!dataUrl) return resolve(null);
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 512;
+      const ratio = Math.min(MAX / img.width, MAX / img.height, 1);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * ratio);
+      canvas.height = Math.round(img.height * ratio);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.75));
+    };
+    img.onerror = () => resolve(null);
+    img.src = dataUrl;
+  });
+}
+
 async function generateAndShowResults() {
   const hero = document.getElementById('result-hero');
   document.getElementById('result-title').textContent = '';
@@ -373,7 +391,10 @@ async function generateAndShowResults() {
   const userNotes = chatHistory
     .filter((m, i) => m.role === 'user' && i > 0)
     .map(m => m.content)
-    .slice(0, 3);
+    .slice(0, 2);
+
+  // Compress uploaded photo to ~512px before sending (stays within Vercel 4.5MB body limit)
+  const photo = await compressPhoto(state.photo);
 
   let dalleUrl = null;
   let dalleError = null;
@@ -381,7 +402,7 @@ async function generateAndShowResults() {
     const res = await fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes })
+      body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes, photo })
     });
     const data = await res.json();
     if(data.imageUrl) {
