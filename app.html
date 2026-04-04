@@ -252,11 +252,12 @@ let chatHistory = [];
 function initChat() {
   document.getElementById('chat-messages').innerHTML = '';
   chatHistory = [];
-  setTimeout(() => callAI("Démarre la conversation."), 500);
+  setTimeout(() => callAI(null), 500);
 }
 
 async function callAI(userMessage) {
-  if(userMessage !== "Démarre la conversation.") {
+  const isFirst = chatHistory.length === 0;
+  if(userMessage !== null) {
     chatHistory.push({ role: 'user', content: userMessage });
   }
   addTyping();
@@ -265,7 +266,7 @@ async function callAI(userMessage) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        messages: chatHistory.length > 0 ? chatHistory : [{ role: 'user', content: userMessage }],
+        messages: chatHistory,
         room: state.room,
         budget: state.budget,
         style: state.style
@@ -274,8 +275,12 @@ async function callAI(userMessage) {
     const data = await res.json();
     document.getElementById('typing')?.remove();
     addAI(data.reply);
+    if(isFirst) {
+      // Seed history with the context message the backend sent on our behalf
+      chatHistory.push({ role: 'user', content: `Je veux rénover ma ${state.room}. Mon budget est ${state.budget} et je veux un style ${state.style}.` });
+    }
     chatHistory.push({ role: 'assistant', content: data.reply });
-    if(chatHistory.length >= 8) {
+    if(chatHistory.filter(m => m.role === 'assistant').length >= 3) {
       setTimeout(() => { document.getElementById('btn5').style.display = 'block'; }, 300);
     }
   } catch(e) {

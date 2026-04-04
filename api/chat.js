@@ -6,21 +6,22 @@ export default async function handler(req, res) {
   try {
     const { messages, room, budget, style } = req.body;
 
-    const isFirstMessage = true;
-    
+    const isFirstMessage = !messages || messages.length === 0;
+
     const systemPrompt = `Tu es un designer intérieur expert et chaleureux pour Renovom.
 L'utilisateur veut rénover sa ${room} avec un budget ${budget} en style ${style}.
 
 Si c'est le début de la conversation :
 1. Fais un résumé friendly et enthousiaste de ses choix (pièce, budget, style)
 2. Annonce que tu vas lui proposer une vision personnalisée de sa pièce rénovée
-3. Demande-lui s'il veut voir une première visualisation IA de sa ${room} transformée en style ${style} avant de continuer
+3. Pose-lui 1 question courte pour commencer à affiner le projet (ex: couleur des murs, luminosité)
 
 Si la conversation est en cours :
 - Pose des questions courtes pour affiner le projet (couleur des murs, contraintes, luminosité)
 - Maximum 2 phrases par réponse
 - Reste toujours chaleureux et professionnel
 
+Rappel du contexte : pièce = ${room}, budget = ${budget}, style = ${style}.
 Réponds toujours en français.`;
 
     const firstMsg = `Je veux rénover ma ${room}. Mon budget est ${budget} et je veux un style ${style}.`;
