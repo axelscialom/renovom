@@ -4,14 +4,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { room, budget, style, notes, photo } = req.body;
+    const { room, budget, style, photo } = req.body;
 
     const styleMap = {
-      'Scandinave': 'Scandinavian interior, light oak wood, white walls, minimalist, cozy textiles',
-      'Industriel': 'industrial loft, exposed concrete, black metal, Edison bulbs, raw materials',
-      'Bohème': 'bohemian interior, rattan, warm earthy tones, layered textiles, indoor plants',
-      'Vintage': 'vintage retro, mid-century modern furniture, warm patina, antique details',
-      'Contemporain': 'contemporary luxury, clean geometric lines, neutral palette, marble and glass'
+      'Scandinave': 'Scandinavian interior, light oak wood, white walls, minimalist, cozy textiles, soft natural light',
+      'Industriel': 'industrial loft interior, exposed concrete walls, black metal fixtures, Edison bulbs, raw textures',
+      'Bohème': 'bohemian interior, rattan furniture, warm earthy tones, layered rugs, indoor plants, eclectic decor',
+      'Vintage': 'vintage mid-century modern interior, retro furniture, warm patina, antique decorative details',
+      'Contemporain': 'contemporary luxury interior, clean geometric lines, neutral palette, marble surfaces, premium finishes'
     };
 
     const roomMap = {
@@ -23,11 +23,10 @@ export default async function handler(req, res) {
       'Entrée': 'entrance hallway'
     };
 
-    const styleDesc = styleMap[style] || style;
-    const roomDesc = roomMap[room] || room;
-    const notesStr = notes && notes.length > 0 ? notes.slice(0, 2).join(', ') : '';
+    const styleDesc = styleMap[style] || 'modern interior';
+    const roomDesc = roomMap[room] || 'room';
 
-    // Step 1: If photo uploaded, use GPT-4o-mini vision to extract room layout
+    // If photo uploaded, analyze room structure with GPT-4o-mini
     let roomContext = '';
     if (photo) {
       try {
@@ -39,33 +38,30 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             model: 'gpt-4o-mini',
-            max_tokens: 100,
+            max_tokens: 80,
             messages: [{
               role: 'user',
               content: [
                 { type: 'image_url', image_url: { url: photo, detail: 'low' } },
-                { type: 'text', text: 'Describe this room in 1 sentence: wall structure, windows position, floor type, approximate size. English only, no extra text.' }
+                { type: 'text', text: 'Describe only: window positions, floor type, wall layout of this room. One sentence, English, factual only.' }
               ]
             }]
           })
         });
         const visionData = await visionRes.json();
         if (visionData.choices?.[0]?.message?.content) {
-          roomContext = visionData.choices[0].message.content;
+          roomContext = visionData.choices[0].message.content.trim();
         }
       } catch (e) {
-        // Vision failed, continue without it
+        // Continue without vision context
       }
     }
 
-    // Step 2: Build DALL-E prompt
-    const basePrompt = roomContext
-      ? `Photorealistic interior design render of a ${roomDesc} with this exact layout: ${roomContext}. Fully renovated in ${styleDesc} style`
-      : `Photorealistic interior design photograph of a beautifully renovated ${roomDesc}, ${styleDesc} style`;
+    // Build a clean, DALL-E-safe prompt (English only, no user conversational text)
+    const prompt = roomContext
+      ? `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Room layout: ${roomContext}. Professional photography, natural lighting, no people.`
+      : `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Professional photography, natural lighting, no people.`;
 
-    const prompt = `${basePrompt}${notesStr ? ', ' + notesStr : ''}, professional lighting, magazine quality, architectural digest style, no people, 4K`;
-
-    // Step 3: Generate with DALL-E 3
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: {
