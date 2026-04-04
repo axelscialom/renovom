@@ -114,6 +114,51 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .gen-text { color: white; font-family: var(--font-display); font-size: 1.1rem; text-align: center; padding: 0 1rem; }
 .dalle-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); color: white; font-size: 0.72rem; padding: 5px 14px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 6px; }
 .dalle-caption { font-size: 0.78rem; color: var(--gray); text-align: center; margin-top: 8px; margin-bottom: 1.5rem; font-style: italic; }
+
+/* === PRODUCT CARD — FICHE PRODUIT === */
+.prod-meta-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+.prod-store-badge { font-size: 0.68rem; font-weight: 700; color: var(--violet); text-transform: uppercase; letter-spacing: 0.07em; }
+.prod-category-badge { font-size: 0.64rem; background: var(--violet-pale); color: var(--violet); padding: 2px 8px; border-radius: 50px; font-weight: 500; }
+.prod-desc { font-size: 0.78rem; color: var(--gray); margin-top: 2px; line-height: 1.45; }
+.prod-price-row { display: flex; align-items: baseline; gap: 10px; margin-top: 5px; flex-wrap: wrap; }
+.prod-price { font-size: 1.05rem; font-weight: 600; color: var(--violet); }
+.prod-delivery { font-size: 0.7rem; color: var(--green); }
+.prod-match-reason { font-size: 0.71rem; color: var(--green); margin-top: 5px; font-style: italic; opacity: 0.9; }
+.prod-actions { display: flex; align-items: center; gap: 8px; margin-top: 9px; flex-wrap: wrap; }
+.btn-view-product { font-size: 0.75rem; color: var(--violet); text-decoration: none; border: 1.5px solid var(--violet); border-radius: 50px; padding: 5px 13px; font-weight: 500; transition: all 0.15s; white-space: nowrap; font-family: var(--font-body); }
+.btn-view-product:hover { background: var(--violet); color: white; }
+.btn-add-cart { white-space: nowrap; flex-shrink: 0; }
+
+/* === SKELETON LOADING === */
+.prod-skeleton { pointer-events: none; }
+.skel-box { border-radius: 10px; }
+.skel-line { border-radius: 4px; }
+.skel-box, .skel-line { background: linear-gradient(90deg, var(--gray-light) 25%, #f0f0f5 50%, var(--gray-light) 75%); background-size: 200% 100%; animation: skel-shimmer 1.4s ease-in-out infinite; }
+@keyframes skel-shimmer { 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+
+/* === CART BAR IMPROVED === */
+.cart-bar { background: var(--violet); border: none; border-radius: 14px; padding: 1rem 1.3rem; display: none; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; box-shadow: 0 4px 16px rgba(45,38,128,0.25); }
+.cart-info { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+.cart-total { font-size: 1.05rem; font-weight: 700; color: white; letter-spacing: -0.01em; }
+
+/* === CART MODAL === */
+.cart-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+.cart-modal-backdrop.open { display: flex; animation: fadeIn 0.2s ease; }
+.cart-modal { background: var(--white); border-radius: 20px 20px 0 0; width: 100%; max-width: 680px; max-height: 80vh; overflow-y: auto; padding: 1.5rem 1.5rem 2rem; }
+.cart-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+.cart-modal-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; color: var(--dark); }
+.cart-modal-close { background: var(--gray-light); border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+.cart-item-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 0.5px solid var(--gray-light); gap: 8px; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name { font-size: 0.85rem; font-weight: 500; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cart-item-store { font-size: 0.72rem; color: var(--gray); }
+.cart-item-price { font-size: 0.9rem; font-weight: 600; color: var(--violet); flex-shrink: 0; }
+.cart-item-link { font-size: 0.72rem; color: var(--violet); text-decoration: none; flex-shrink: 0; border: 1px solid var(--violet); border-radius: 50px; padding: 3px 10px; }
+.cart-item-link:hover { background: var(--violet); color: white; }
+.cart-modal-footer { margin-top: 1.2rem; }
+.cart-modal-total { display: flex; justify-content: space-between; font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 1rem; }
+.btn-checkout { background: var(--green); color: white; border: none; border-radius: 50px; padding: 0.85rem 2rem; font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; transition: all 0.2s; }
+.btn-checkout:hover { background: #0A5A46; transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -208,12 +253,27 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <div id="result-hero" class="result-hero"></div>
     <h1 class="screen-title" id="result-title"></h1>
     <p class="screen-sub" id="result-sub"></p>
-    <div class="cart-bar" id="cart-bar">
+    <div class="cart-bar" id="cart-bar" onclick="openCartModal()" style="cursor:pointer;">
       <span class="cart-info" id="cart-info">0 produit dans le panier</span>
-      <span class="cart-total" id="cart-total">0,00 €</span>
+      <span class="cart-total" id="cart-total">0,00 €  →</span>
     </div>
     <div id="products-list"></div>
-    <button class="btn-order" id="btn-order" onclick="alert('Commande bientôt disponible !')">Commander tout le panier →</button>
+    <button class="btn-order" id="btn-order" onclick="openCartModal()">Voir mon panier Renovom →</button>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal-backdrop" id="cart-modal-backdrop" onclick="closeCartModalOnBackdrop(event)">
+    <div class="cart-modal">
+      <div class="cart-modal-header">
+        <div class="cart-modal-title">Mon panier Renovom</div>
+        <button class="cart-modal-close" onclick="closeCartModal()">✕</button>
+      </div>
+      <div id="cart-modal-items"></div>
+      <div class="cart-modal-footer">
+        <div class="cart-modal-total"><span>Total estimé</span><span id="cart-modal-total-price">0,00 €</span></div>
+        <button class="btn-checkout" onclick="checkoutCart()">Accéder aux produits sélectionnés →</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -324,45 +384,94 @@ function sendMsg() {
   callAI(val);
 }
 
-const db = {
-  'Cuisine': [
-    {icon:'🎨',bg:'#F5F0E8',store:'Leroy Merlin',name:'Peinture mat cuisine — Blanc Craie 2.5L',ref:'Dulux Valentine Crème de Couleur',price:28.90,delivery:'Livraison gratuite sous 48h'},
-    {icon:'💡',bg:'#FAEEDA',store:'Leroy Merlin',name:'Suspension LED bois naturel Ø30cm',ref:'Eglo Vintage Santander',price:49.90,delivery:'Livraison gratuite sous 72h'},
-    {icon:'🚿',bg:'#E6F1FB',store:'Castorama',name:'Mitigeur cuisine chromé pivotant',ref:'Hansgrohe Focus 31815000',price:89.00,delivery:'Livraison en 3–5 jours ouvrés'},
-    {icon:'🪑',bg:'#F1EFE8',store:'IKEA',name:'Tabouret de bar chêne clair H75cm',ref:'IKEA FRANKLIN naturel',price:34.99,delivery:'Click & Collect dès demain'},
-  ],
-  'Chambre': [
-    {icon:'🎨',bg:'#E6F1FB',store:'Leroy Merlin',name:'Peinture velours Bleu Nuit Doux 2.5L',ref:'V33 Ambiance Cocooning',price:32.50,delivery:'Livraison gratuite sous 48h'},
-    {icon:'🛏',bg:'#D3D1C7',store:'Cdiscount',name:'Tête de lit capitonnée velours gris 160cm',ref:'Atmosphera Cassiopée',price:79.99,delivery:'Livraison sous 5 jours'},
-    {icon:'💡',bg:'#FAEEDA',store:'Maisons du Monde',name:'Lampe chevet marbre & métal doré',ref:'Maisons du Monde Bianca',price:44.90,delivery:'Livraison gratuite sous 72h'},
-    {icon:'🪞',bg:'#F1EFE8',store:'IKEA',name:'Miroir rond bords dorés Ø60cm',ref:'IKEA LINDBYN or',price:29.99,delivery:'Click & Collect dès demain'},
-  ],
-  'Salon': [
-    {icon:'🎨',bg:'#FAECE7',store:'Leroy Merlin',name:'Peinture lin naturel Terracotta doux',ref:'Farrow & Ball Potted Shrimp',price:42.00,delivery:'Livraison gratuite sous 48h'},
-    {icon:'🛋',bg:'#E1F5EE',store:'La Redoute',name:'Canapé 3 places velours côtelé sage',ref:'La Redoute Interieurs Covy',price:699.00,delivery:'Livraison sous 10 jours'},
-    {icon:'💡',bg:'#FAEEDA',store:'IKEA',name:'Lampadaire laiton brossé 150cm',ref:'IKEA RANARP laiton',price:59.99,delivery:'Click & Collect dès demain'},
-    {icon:'🪴',bg:'#F1EFE8',store:'Maisons du Monde',name:'Cache-pot céramique blanc mat Ø22cm',ref:'Maisons du Monde Lagom',price:19.90,delivery:'Livraison gratuite sous 72h'},
-  ],
-  'Salle de bain': [
-    {icon:'🎨',bg:'#E6F1FB',store:'Leroy Merlin',name:'Peinture salle de bain anti-humidité Blanc Satin',ref:'Tollens Résistance+',price:24.90,delivery:'Livraison gratuite sous 48h'},
-    {icon:'🪞',bg:'#F1EFE8',store:'Castorama',name:'Miroir LED anti-buée 60x80cm',ref:'Allibert Baho',price:119.00,delivery:'Livraison en 5 jours'},
-    {icon:'🚿',bg:'#E1F5EE',store:'Leroy Merlin',name:'Colonne de douche thermostatique',ref:'Grohe Euphoria 260',price:249.00,delivery:'Livraison sous 7 jours'},
-    {icon:'🪣',bg:'#FAEEDA',store:'IKEA',name:'Meuble sous-vasque bambou 2 tiroirs',ref:'IKEA GODMORGON',price:89.99,delivery:'Click & Collect dès demain'},
-  ],
-  'Bureau': [
-    {icon:'🎨',bg:'#EEEDFE',store:'Leroy Merlin',name:'Peinture mate Gris Ardoise 2.5L',ref:'Dulux Valentine Color Resist',price:31.90,delivery:'Livraison gratuite sous 48h'},
-    {icon:'🖥',bg:'#E6F1FB',store:'IKEA',name:'Bureau réglable en hauteur 160x80cm',ref:'IKEA BEKANT blanc',price:349.00,delivery:'Livraison sous 7 jours'},
-    {icon:'💡',bg:'#FAEEDA',store:'Maisons du Monde',name:'Lampe de bureau architecte noir mat',ref:'Maisons du Monde Orson',price:69.90,delivery:'Livraison gratuite sous 72h'},
-    {icon:'🪴',bg:'#E1F5EE',store:'Leroy Merlin',name:'Étagère murale chêne 80cm x3',ref:'Lapeyre Naturel',price:45.00,delivery:'Click & Collect dès demain'},
-  ],
-  'Entrée': [
-    {icon:'🎨',bg:'#FAECE7',store:'Leroy Merlin',name:'Peinture satin Beige Sable 2.5L',ref:'Dulux Valentine Satin',price:26.90,delivery:'Livraison gratuite sous 48h'},
-    {icon:'🪞',bg:'#F1EFE8',store:'IKEA',name:'Miroir plein pied avec rangement',ref:'IKEA HEMNES miroir',price:149.00,delivery:'Livraison sous 7 jours'},
-    {icon:'🚪',bg:'#E6F1FB',store:'Maisons du Monde',name:'Portemanteau bois et métal 5 crochets',ref:'Maisons du Monde Izmir',price:39.90,delivery:'Livraison gratuite sous 72h'},
-    {icon:'💡',bg:'#FAEEDA',store:'Leroy Merlin',name:'Applique murale LED détecteur',ref:'Philips Hue Appear',price:79.00,delivery:'Livraison sous 5 jours'},
-  ],
-};
+// =====================================================
+// STORE SEARCH URL BUILDER
+// =====================================================
+function buildStoreUrl(p) {
+  const q = encodeURIComponent(p.name);
+  const urls = {
+    'Leroy Merlin': `https://www.leroymerlin.fr/recherche?q=${q}`,
+    'IKEA': `https://www.ikea.com/fr/fr/search/?q=${q}`,
+    'Castorama': `https://www.castorama.fr/search?q=${q}`,
+    'Maisons du Monde': `https://www.maisonsdumonde.com/FR/fr/search?Ntt=${q}`,
+    'La Redoute': `https://www.laredoute.fr/recherche/?tab=listing&keywords=${q}`,
+    'Brico Dépôt': `https://www.bricodepot.fr/recherche?query=${q}`,
+    'Amazon.fr': `https://www.amazon.fr/s?k=${q}`
+  };
+  return urls[p.store] || `https://www.google.fr/search?q=${q}+${encodeURIComponent(p.store || '')}+France`;
+}
 
+// =====================================================
+// PRODUCT SKELETON LOADING
+// =====================================================
+function showProductsSkeleton() {
+  const list = document.getElementById('products-list');
+  const skels = Array(5).fill(0).map(() => `
+    <div class="product-card-full prod-skeleton">
+      <div class="prod-img skel-box" style="background:var(--gray-light);min-width:70px;height:70px;"></div>
+      <div class="prod-info" style="flex:1">
+        <div class="skel-line" style="width:55%;height:10px;margin-bottom:8px;"></div>
+        <div class="skel-line" style="width:90%;height:15px;margin-bottom:6px;"></div>
+        <div class="skel-line" style="width:75%;height:11px;margin-bottom:6px;"></div>
+        <div class="skel-line" style="width:35%;height:17px;margin-bottom:10px;"></div>
+        <div class="skel-line" style="width:60%;height:28px;border-radius:50px;"></div>
+      </div>
+    </div>`).join('');
+  list.innerHTML = `<p style="font-size:0.78rem;color:var(--gray);margin-bottom:0.8rem;font-style:italic;">✦ Sélection de produits personnalisée en cours…</p>${skels}`;
+}
+
+// =====================================================
+// RENDER PRODUCTS (FICHES PRODUIT)
+// =====================================================
+function renderProducts(products) {
+  const list = document.getElementById('products-list');
+  list.innerHTML = '';
+
+  if (!products || products.length === 0) {
+    list.innerHTML = '<p style="color:var(--gray);font-size:0.85rem;text-align:center;padding:1.5rem 0;">Aucun produit disponible pour cette combinaison. Réessayez.</p>';
+    return;
+  }
+
+  const sectionLabel = document.createElement('p');
+  sectionLabel.style.cssText = 'font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--violet);margin-bottom:0.8rem;';
+  sectionLabel.textContent = 'Produits recommandés pour ce projet';
+  list.appendChild(sectionLabel);
+
+  products.forEach(function(p, i) {
+    const storeUrl = buildStoreUrl(p);
+    // Safely escape for inline event handler
+    const safeName = p.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
+    const safeStore = (p.store || '').replace(/'/g, "\\'");
+    const safeUrl = storeUrl.replace(/'/g, '%27');
+
+    const card = document.createElement('div');
+    card.className = 'product-card-full';
+    card.innerHTML = `
+      <div class="prod-img" style="background:${p.iconBg || '#F5F0E8'}">${p.icon || '📦'}</div>
+      <div class="prod-info">
+        <div class="prod-meta-row">
+          <span class="prod-store-badge">${p.store || ''}</span>
+          <span class="prod-category-badge">${p.category || ''}</span>
+        </div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-desc">${p.description || ''}</div>
+        <div class="prod-price-row">
+          <span class="prod-price">${p.price.toFixed(2).replace('.', ',')} €</span>
+          <span class="prod-delivery">✓ ${p.delivery || 'Livraison disponible'}</span>
+        </div>
+        ${p.matchReason ? `<div class="prod-match-reason">✦ ${p.matchReason}</div>` : ''}
+        <div class="prod-actions">
+          <button class="btn-add-cart" id="cb${i}" onclick="addCart(${i},'${safeName}',${p.price},'${safeStore}','${safeUrl}')">+ Ajouter au panier</button>
+          <a class="btn-view-product" href="${storeUrl}" target="_blank" rel="noopener noreferrer">Voir chez ${p.store} →</a>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// =====================================================
+// COMPRESS PHOTO
+// =====================================================
 function compressPhoto(dataUrl) {
   return new Promise(resolve => {
     if(!dataUrl) return resolve(null);
@@ -382,80 +491,157 @@ function compressPhoto(dataUrl) {
 }
 
 async function generateAndShowResults() {
+  // Reset state
+  added.clear();
+  state.cart = [];
+  state.total = 0;
+
   const hero = document.getElementById('result-hero');
   document.getElementById('result-title').textContent = '';
   document.getElementById('result-sub').textContent = '';
-  document.getElementById('products-list').innerHTML = '';
-  hero.innerHTML = '<div class="result-generating"><div class="gen-label">DALL·E 3</div><div class="gen-spinner"></div><div class="gen-text">Génération de votre '+state.room+' style '+state.style+'…</div></div>';
+  document.getElementById('cart-bar').style.display = 'none';
+  document.getElementById('btn-order').style.display = 'none';
+
+  // Show image spinner immediately
+  hero.innerHTML = `<div class="result-generating">
+    <div class="gen-label">DALL·E 3</div>
+    <div class="gen-spinner"></div>
+    <div class="gen-text">Génération de votre ${state.room} style ${state.style}…</div>
+  </div>`;
+
+  // Show product skeleton immediately (products load in parallel)
+  showProductsSkeleton();
 
   const userNotes = chatHistory
     .filter((m, i) => m.role === 'user' && i > 0)
     .map(m => m.content)
     .slice(0, 2);
 
-  // Compress uploaded photo to ~512px before sending (stays within Vercel 4.5MB body limit)
+  // Compress uploaded photo to ~512px (stays within Vercel 4.5MB body limit)
   const photo = await compressPhoto(state.photo);
 
-  let dalleUrl = null;
-  let dalleError = null;
-  try {
-    const res = await fetch('/api/image', {
+  // Run image generation and product recommendations in parallel
+  const [imageResult, productsResult] = await Promise.allSettled([
+    fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes, photo })
-    });
-    const data = await res.json();
-    if(data.imageUrl) {
-      dalleUrl = data.imageUrl;
-    } else {
-      dalleError = data.error || 'Erreur API inconnue';
-    }
-  } catch(e) {
-    dalleError = e.message;
-  }
+    }).then(r => r.json()),
 
-  showResults(dalleUrl, dalleError);
+    fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ room: state.room, style: state.style, budget: state.budget, notes: userNotes })
+    }).then(r => r.json())
+  ]);
+
+  const imageData = imageResult.status === 'fulfilled' ? imageResult.value : {};
+  const productsData = productsResult.status === 'fulfilled' ? productsResult.value : {};
+
+  const dalleUrl = imageData.imageUrl || null;
+  const dalleError = imageData.error || (imageResult.status === 'rejected' ? 'Erreur réseau image' : null);
+  const products = productsData.products || null;
+
+  showResults(dalleUrl, dalleError, products);
 }
 
-function showResults(dalleUrl, dalleError) {
-  const prods = db[state.room] || db['Salon'];
-  document.getElementById('result-title').textContent = 'Votre '+state.room+' style '+state.style;
-  document.getElementById('result-sub').textContent = 'Budget '+state.budget+' · Produits sélectionnés pour cette visualisation';
+function showResults(dalleUrl, dalleError, products) {
+  document.getElementById('result-title').textContent = 'Votre ' + state.room + ' style ' + state.style;
+  document.getElementById('result-sub').textContent = 'Budget ' + state.budget + ' · Recommandations personnalisées par l\'IA';
   const hero = document.getElementById('result-hero');
 
-  if(dalleUrl) {
-    hero.innerHTML = '<img src="'+dalleUrl+'" class="result-photo" style="filter:none;" /><div class="result-overlay"><div class="dalle-badge">✦ Visualisation générée par DALL·E 3</div><div class="result-title">Style '+state.style+'</div></div>';
+  // Remove any previous caption
+  document.querySelector('.dalle-caption')?.remove();
+
+  if (dalleUrl) {
+    hero.innerHTML = `<img src="${dalleUrl}" class="result-photo" style="filter:none;" />
+      <div class="result-overlay">
+        <div class="dalle-badge">✦ Visualisation générée par DALL·E 3</div>
+        <div class="result-title">Style ${state.style}</div>
+      </div>`;
     const caption = document.createElement('p');
     caption.className = 'dalle-caption';
-    caption.textContent = 'Image générée par IA — les produits ci-dessous permettent d\'obtenir ce résultat.';
+    caption.textContent = 'Image générée par IA · Les produits ci-dessous reproduisent ce résultat chez vous.';
     hero.after(caption);
-  } else if(dalleError) {
-    hero.innerHTML = '<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;"><div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération DALL·E indisponible</div><div class="gen-text" style="font-size:0.85rem;padding:0 1.5rem;text-align:center;">'+dalleError+'</div><div class="gen-label" style="color:rgba(255,255,255,0.6);">Vérifiez OPENAI_API_KEY dans Vercel</div></div>';
-  } else if(state.photo) {
-    hero.innerHTML = '<img src="'+state.photo+'" class="result-photo" /><div class="result-overlay"><div class="result-badge">Votre pièce actuelle</div><div class="result-title">Projet '+state.style+'</div></div>';
+  } else if (dalleError) {
+    hero.innerHTML = `<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;">
+      <div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération DALL·E indisponible</div>
+      <div class="gen-text" style="font-size:0.85rem;padding:0 1.5rem;text-align:center;">${dalleError}</div>
+      <div class="gen-label" style="color:rgba(255,255,255,0.6);">Vérifiez OPENAI_API_KEY dans Vercel</div>
+    </div>`;
+  } else if (state.photo) {
+    hero.innerHTML = `<img src="${state.photo}" class="result-photo" />
+      <div class="result-overlay">
+        <div class="result-badge">Votre pièce actuelle</div>
+        <div class="result-title">Projet ${state.style}</div>
+      </div>`;
   } else {
-    hero.innerHTML = '<div class="result-placeholder"><div class="result-badge">Votre plan personnalisé</div><div class="result-title">'+state.room+' · Style '+state.style+'</div></div>';
+    hero.innerHTML = `<div class="result-placeholder">
+      <div class="result-badge">Votre plan personnalisé</div>
+      <div class="result-title">${state.room} · Style ${state.style}</div>
+    </div>`;
   }
 
-  const list = document.getElementById('products-list'); list.innerHTML = '';
-  prods.forEach(function(p,i) {
-    const d = document.createElement('div'); d.className = 'product-card-full';
-    d.innerHTML = '<div class="prod-img" style="background:'+p.bg+'">'+p.icon+'</div><div class="prod-info"><div class="prod-store">'+p.store+' · Meilleur prix</div><div class="prod-name">'+p.name+'</div><div class="prod-ref">'+p.ref+'</div><div class="prod-price">'+p.price.toFixed(2).replace('.',',')+'€</div><div class="prod-delivery">✓ '+p.delivery+'</div><button class="btn-add-cart" id="cb'+i+'" onclick="addCart('+i+',\''+p.name.replace(/'/g,"\\'")+"',"+p.price+')">+ Ajouter au panier</button></div>';
-    list.appendChild(d);
-  });
+  renderProducts(products);
 }
 
-function addCart(i, name, price) {
-  if(added.has(i)) return;
+// =====================================================
+// CART MANAGEMENT
+// =====================================================
+function addCart(i, name, price, store, url) {
+  if (added.has(i)) return;
   added.add(i);
   state.total += price;
-  state.cart.push(name);
-  const btn = document.getElementById('cb'+i);
-  btn.textContent = '✓ Ajouté'; btn.classList.add('added'); btn.disabled = true;
+  state.cart.push({ name, price, store, url });
+
+  const btn = document.getElementById('cb' + i);
+  btn.textContent = '✓ Ajouté';
+  btn.classList.add('added');
+  btn.disabled = true;
+
+  const count = state.cart.length;
   document.getElementById('cart-bar').style.display = 'flex';
-  document.getElementById('cart-info').textContent = state.cart.length+' produit'+(state.cart.length>1?'s':'')+' dans le panier';
-  document.getElementById('cart-total').textContent = state.total.toFixed(2).replace('.',',')+' €';
+  document.getElementById('cart-info').textContent = count + ' produit' + (count > 1 ? 's' : '') + ' dans le panier';
+  document.getElementById('cart-total').textContent = state.total.toFixed(2).replace('.', ',') + ' €  →';
   document.getElementById('btn-order').style.display = 'block';
+}
+
+function openCartModal() {
+  if (state.cart.length === 0) return;
+  const modal = document.getElementById('cart-modal-backdrop');
+  const itemsEl = document.getElementById('cart-modal-items');
+  const totalEl = document.getElementById('cart-modal-total-price');
+
+  itemsEl.innerHTML = state.cart.map(item => `
+    <div class="cart-item-row">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-store">${item.store}</div>
+      </div>
+      <span class="cart-item-price">${item.price.toFixed(2).replace('.', ',')} €</span>
+      <a class="cart-item-link" href="${item.url}" target="_blank" rel="noopener noreferrer">Voir →</a>
+    </div>`).join('');
+
+  totalEl.textContent = state.total.toFixed(2).replace('.', ',') + ' €';
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCartModal() {
+  document.getElementById('cart-modal-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeCartModalOnBackdrop(e) {
+  if (e.target === document.getElementById('cart-modal-backdrop')) closeCartModal();
+}
+
+function checkoutCart() {
+  // Open all product links in new tabs so user can buy directly
+  state.cart.forEach((item, i) => {
+    setTimeout(() => { window.open(item.url, '_blank', 'noopener,noreferrer'); }, i * 300);
+  });
+  closeCartModal();
 }
 </script>
 </body>
