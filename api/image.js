@@ -4,74 +4,30 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { room, budget, style, photo } = req.body;
+    const { room, style } = req.body;
 
     const styleMap = {
-      'Scandinave': 'Scandinavian interior, light oak wood, white walls, minimalist, cozy textiles, soft natural light',
-      'Industriel': 'industrial loft interior, exposed concrete walls, black metal fixtures, Edison bulbs, raw textures',
-      'Bohème': 'bohemian interior, rattan furniture, warm earthy tones, layered rugs, indoor plants, eclectic decor',
-      'Vintage': 'vintage mid-century modern interior, retro furniture, warm patina, antique decorative details',
-      'Contemporain': 'contemporary luxury interior, clean geometric lines, neutral palette, marble surfaces, premium finishes'
+      'Scandinave':    'Scandinavian interior design, light oak wood furniture, white walls, minimalist decor, cozy textiles, soft natural light, clean lines',
+      'Industriel':    'industrial loft interior design, exposed concrete walls, black metal fixtures, Edison bulb lighting, raw textures, dark tones',
+      'Bohème':        'bohemian interior design, rattan furniture, warm earthy tones, layered rugs, lush indoor plants, eclectic colorful decor',
+      'Vintage':       'vintage mid-century modern interior design, retro curved furniture, warm patina, antique decorative details, pastel tones',
+      'Contemporain':  'contemporary luxury interior design, clean geometric lines, neutral palette, marble surfaces, premium finishes, dramatic lighting'
     };
 
     const roomMap = {
-      'Cuisine': 'kitchen',
-      'Chambre': 'bedroom',
+      'Cuisine':       'kitchen',
+      'Chambre':       'bedroom',
       'Salle de bain': 'bathroom',
-      'Salon': 'living room',
-      'Bureau': 'home office',
-      'Entrée': 'entrance hallway'
+      'Salon':         'living room',
+      'Bureau':        'home office',
+      'Entrée':        'entrance hallway'
     };
 
-    const styleDesc = styleMap[style] || 'modern interior';
-    const roomDesc = roomMap[room] || 'room';
+    const styleDesc = styleMap[style] || 'modern interior design';
+    const roomDesc  = roomMap[room]   || 'room';
 
-    // Optional: analyze room structure with GPT-4o-mini vision
-    // We use a strict 5s timeout so it never blocks DALL-E generation
-    let roomContext = '';
-    if (photo) {
-      try {
-        const controller = new AbortController();
-        const visionTimeout = setTimeout(() => controller.abort(), 5000);
-
-        const visionRes = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            max_tokens: 60,
-            messages: [{
-              role: 'user',
-              content: [
-                { type: 'image_url', image_url: { url: photo, detail: 'low' } },
-                { type: 'text', text: 'One sentence, English only: window positions, floor type, wall layout.' }
-              ]
-            }]
-          })
-        });
-
-        clearTimeout(visionTimeout);
-        const visionData = await visionRes.json();
-        if (visionData.choices?.[0]?.message?.content) {
-          // Sanitize: keep only printable ASCII to avoid DALL-E prompt validation errors
-          roomContext = visionData.choices[0].message.content
-            .replace(/[^\x20-\x7E]/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .slice(0, 200);
-        }
-      } catch (e) {
-        // Vision timed out or failed — continue without context
-      }
-    }
-
-    const prompt = roomContext
-      ? `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Room layout: ${roomContext}. Professional photography, natural lighting, no people.`
-      : `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Professional photography, natural lighting, no people.`;
+    // Clean, minimal prompt — no dynamic user content to avoid validation errors
+    const prompt = `Professional interior design photography of a beautifully renovated ${roomDesc}. Style: ${styleDesc}. Bright natural lighting, no people, photorealistic, high quality.`;
 
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
@@ -92,6 +48,10 @@ export default async function handler(req, res) {
 
     if (data.error) {
       return res.status(500).json({ error: data.error.message });
+    }
+
+    if (!data.data?.[0]?.url) {
+      return res.status(500).json({ error: 'No image returned by DALL-E' });
     }
 
     res.status(200).json({ imageUrl: data.data[0].url });
