@@ -364,20 +364,19 @@ const db = {
 };
 
 async function generateAndShowResults() {
-  // Show step 6 immediately with loading state
   const hero = document.getElementById('result-hero');
   document.getElementById('result-title').textContent = '';
   document.getElementById('result-sub').textContent = '';
   document.getElementById('products-list').innerHTML = '';
   hero.innerHTML = '<div class="result-generating"><div class="gen-label">DALL·E 3</div><div class="gen-spinner"></div><div class="gen-text">Génération de votre '+state.room+' style '+state.style+'…</div></div>';
 
-  // Collect user chat notes (skip the first seeded context message at index 0)
   const userNotes = chatHistory
     .filter((m, i) => m.role === 'user' && i > 0)
     .map(m => m.content)
     .slice(0, 3);
 
   let dalleUrl = null;
+  let dalleError = null;
   try {
     const res = await fetch('/api/image', {
       method: 'POST',
@@ -385,18 +384,23 @@ async function generateAndShowResults() {
       body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes })
     });
     const data = await res.json();
-    if(!data.error) dalleUrl = data.imageUrl;
-  } catch(e) { /* fallback to uploaded photo */ }
+    if(data.imageUrl) {
+      dalleUrl = data.imageUrl;
+    } else {
+      dalleError = data.error || 'Erreur API inconnue';
+    }
+  } catch(e) {
+    dalleError = e.message;
+  }
 
-  showResults(dalleUrl);
+  showResults(dalleUrl, dalleError);
 }
 
-function showResults(dalleUrl) {
+function showResults(dalleUrl, dalleError) {
   const prods = db[state.room] || db['Salon'];
   document.getElementById('result-title').textContent = 'Votre '+state.room+' style '+state.style;
   document.getElementById('result-sub').textContent = 'Budget '+state.budget+' · Produits sélectionnés pour cette visualisation';
   const hero = document.getElementById('result-hero');
-  const displayImg = dalleUrl || state.photo;
 
   if(dalleUrl) {
     hero.innerHTML = '<img src="'+dalleUrl+'" class="result-photo" style="filter:none;" /><div class="result-overlay"><div class="dalle-badge">✦ Visualisation générée par DALL·E 3</div><div class="result-title">Style '+state.style+'</div></div>';
@@ -404,6 +408,8 @@ function showResults(dalleUrl) {
     caption.className = 'dalle-caption';
     caption.textContent = 'Image générée par IA — les produits ci-dessous permettent d\'obtenir ce résultat.';
     hero.after(caption);
+  } else if(dalleError) {
+    hero.innerHTML = '<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;"><div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération DALL·E indisponible</div><div class="gen-text" style="font-size:0.85rem;padding:0 1.5rem;text-align:center;">'+dalleError+'</div><div class="gen-label" style="color:rgba(255,255,255,0.6);">Vérifiez OPENAI_API_KEY dans Vercel</div></div>';
   } else if(state.photo) {
     hero.innerHTML = '<img src="'+state.photo+'" class="result-photo" /><div class="result-overlay"><div class="result-badge">Votre pièce actuelle</div><div class="result-title">Projet '+state.style+'</div></div>';
   } else {
