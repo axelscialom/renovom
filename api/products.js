@@ -47,6 +47,7 @@ Reply ONLY with this JSON structure (no text before or after):
         "icon": "🛏️",
         "iconBg": "#F5F0E8",
         "delivery": "Click & Collect gratuit · Livraison à domicile dès 49€",
+        "searchQuery": "MALM lit cadre",
         "dalleDescription": "light oak Scandinavian bed frame with white linen bedding, minimalist style"
       }
     ]
@@ -54,6 +55,7 @@ Reply ONLY with this JSON structure (no text before or after):
 }
 
 Rules:
+- searchQuery: 2-4 key words in French that will find this exact product in the store's search engine (e.g. "MALM lit chêne" or "peinture blanc mat 10L"). Use the product reference/model name if known.
 - dalleDescription: English, 10-15 words, describes what the product looks like visually for an AI image prompt
 - icon: single emoji matching the element
 - iconBg: soft hex color matching style (Scandinave: #F5F0E8, Industriel: #3A3A4A, Bohème: #FAEEDA, Vintage: #F8F0E8, Contemporain: #F0F0F5)

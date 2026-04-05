@@ -182,20 +182,32 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .analyzing-spinner { width: 32px; height: 32px; border: 3px solid rgba(45,38,128,0.2); border-top-color: var(--violet); border-radius: 50%; animation: spin 0.85s linear infinite; margin: 0 auto 10px; }
 .analyzing-text { font-size: 0.85rem; color: var(--violet); font-weight: 500; }
 
-/* === PRODUCT OPTIONS (3 per element) === */
-.element-section { margin-bottom: 1.8rem; }
-.element-section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem; }
+/* === PRODUCT OPTIONS (list, 1 per row) === */
+.element-section { margin-bottom: 2rem; }
+.element-section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem; }
 .element-section-icon { font-size: 1.2rem; }
-.element-section-title { font-size: 0.85rem; font-weight: 700; color: var(--dark); text-transform: uppercase; letter-spacing: 0.06em; }
-.product-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.product-option { background: var(--white); border: 1.5px solid var(--gray-light); border-radius: 14px; padding: 0.85rem 0.7rem; cursor: pointer; transition: all 0.15s; text-align: center; }
-.product-option:hover { border-color: var(--violet-light); }
+.element-section-title { font-size: 0.82rem; font-weight: 700; color: var(--dark); text-transform: uppercase; letter-spacing: 0.06em; }
+.product-options { display: flex; flex-direction: column; gap: 8px; }
+.product-option { background: var(--white); border: 1.5px solid var(--gray-light); border-radius: 14px; padding: 0.9rem 1rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 12px; position: relative; }
+.product-option:hover { border-color: var(--violet-light); box-shadow: 0 2px 8px rgba(74,66,200,0.08); }
 .product-option.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
-.opt-icon { font-size: 1.5rem; margin-bottom: 5px; }
-.opt-store { font-size: 0.6rem; font-weight: 700; color: var(--violet); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
-.opt-name { font-size: 0.72rem; font-weight: 500; color: var(--dark); line-height: 1.3; margin-bottom: 4px; }
-.opt-price { font-size: 0.85rem; font-weight: 700; color: var(--violet); }
-.opt-delivery { font-size: 0.6rem; color: var(--green); margin-top: 2px; line-height: 1.3; }
+.opt-icon-wrap { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.opt-body { flex: 1; min-width: 0; }
+.opt-top { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; flex-wrap: wrap; }
+.opt-tier { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 50px; }
+.opt-tier.eco { background: #E8F5EF; color: #0F6E56; }
+.opt-tier.mid { background: var(--violet-pale); color: var(--violet); }
+.opt-tier.prem { background: #FFF3E0; color: #B45309; }
+.opt-store { font-size: 0.68rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+.opt-name { font-size: 0.83rem; font-weight: 600; color: var(--dark); line-height: 1.3; margin-bottom: 3px; }
+.opt-desc { font-size: 0.75rem; color: var(--gray); line-height: 1.4; margin-bottom: 5px; }
+.opt-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.opt-price { font-size: 1rem; font-weight: 700; color: var(--violet); }
+.opt-delivery { font-size: 0.65rem; color: var(--green); }
+.opt-link { font-size: 0.72rem; color: var(--violet); text-decoration: none; border: 1px solid var(--violet); border-radius: 50px; padding: 3px 10px; white-space: nowrap; font-weight: 500; font-family: var(--font-body); flex-shrink: 0; }
+.opt-link:hover { background: var(--violet); color: white; }
+.opt-check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; transition: all 0.15s; }
+.product-option.selected .opt-check { background: var(--violet); border-color: var(--violet); }
 .options-loading { background: var(--violet-pale); border-radius: 14px; padding: 1.5rem; text-align: center; }
 .btn-secondary { background: transparent; color: var(--gray); border: 1.5px solid var(--gray-light); border-radius: 50px; padding: 0.75rem 2rem; font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; cursor: pointer; width: 100%; margin-top: 0.75rem; transition: all 0.2s; }
 .btn-secondary:hover { border-color: var(--violet-light); color: var(--violet); }
@@ -465,7 +477,8 @@ function skipPhoto() {
 // STORE SEARCH URL BUILDER
 // =====================================================
 function buildStoreUrl(p) {
-  const q = encodeURIComponent(p.name);
+  // Use searchQuery if available (optimized 2-4 word search term), else fall back to product name
+  const q = encodeURIComponent(p.searchQuery || p.name);
   const urls = {
     'Leroy Merlin': `https://www.leroymerlin.fr/recherche?q=${q}`,
     'IKEA': `https://www.ikea.com/fr/fr/search/?q=${q}`,
@@ -475,7 +488,7 @@ function buildStoreUrl(p) {
     'Brico Dépôt': `https://www.bricodepot.fr/recherche?query=${q}`,
     'Amazon.fr': `https://www.amazon.fr/s?k=${q}`
   };
-  return urls[p.store] || `https://www.google.fr/search?q=${q}+${encodeURIComponent(p.store || '')}+France`;
+  return urls[p.store] || `https://www.google.fr/search?q=${q}+${encodeURIComponent(p.store || '')}`;
 }
 
 // =====================================================
@@ -580,6 +593,12 @@ function renderProductOptions() {
     return;
   }
 
+  const tiers = [
+    { key: 'eco',  label: 'Économique' },
+    { key: 'mid',  label: 'Intermédiaire' },
+    { key: 'prem', label: 'Premium' }
+  ];
+
   elementNames.forEach(elName => {
     const options = state.products[elName];
     if (!options || !options.length) return;
@@ -598,14 +617,28 @@ function renderProductOptions() {
 
     const optsGrid = section.querySelector('.product-options');
     options.forEach((p, i) => {
+      const tier = tiers[i] || tiers[2];
+      const storeUrl = buildStoreUrl(p);
       const opt = document.createElement('div');
       opt.className = 'product-option';
       opt.innerHTML = `
-        <div class="opt-icon" style="background:${p.iconBg||'#F5F0E8'};border-radius:8px;padding:6px;">${p.icon||'📦'}</div>
-        <div class="opt-store">${p.store}</div>
-        <div class="opt-name">${p.name}</div>
-        <div class="opt-price">${(+p.price).toFixed(2).replace('.',',')} €</div>
-        <div class="opt-delivery">${p.delivery||''}</div>`;
+        <div class="opt-check">✓</div>
+        <div class="opt-icon-wrap" style="background:${p.iconBg||'#F5F0E8'}">${p.icon||'📦'}</div>
+        <div class="opt-body">
+          <div class="opt-top">
+            <span class="opt-tier ${tier.key}">${tier.label}</span>
+            <span class="opt-store">${p.store}</span>
+          </div>
+          <div class="opt-name">${p.name}</div>
+          <div class="opt-desc">${p.description||''}</div>
+          <div class="opt-bottom">
+            <div>
+              <div class="opt-price">${(+p.price).toFixed(2).replace('.',',')} €</div>
+              <div class="opt-delivery">✓ ${p.delivery||''}</div>
+            </div>
+            <a class="opt-link" href="${storeUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Voir sur ${p.store} →</a>
+          </div>
+        </div>`;
       opt.onclick = () => selectProduct(elName, i, opt, p);
       optsGrid.appendChild(opt);
     });
@@ -807,7 +840,7 @@ function renderSelectedProducts() {
         </div>
         <div class="prod-actions">
           <button class="btn-add-cart" id="scb${i}" onclick="addToCart(${i},'${p.name.replace(/'/g,"\\'")}',${p.price},'${(p.store||'').replace(/'/g,"\\'")}','${storeUrl.replace(/'/g,'%27')}')">+ Ajouter au panier</button>
-          <a class="btn-view-product" href="${storeUrl}" target="_blank" rel="noopener noreferrer">Voir chez ${p.store} →</a>
+          <a class="btn-view-product" href="${storeUrl}" target="_blank" rel="noopener noreferrer">Rechercher chez ${p.store} →</a>
         </div>
       </div>`;
     list.appendChild(card);
