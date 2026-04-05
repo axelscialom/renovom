@@ -1,9 +1,12 @@
 {
   "functions": {
     "api/image.js": {
-      "maxDuration": 45
+      "maxDuration": 60
     },
     "api/products.js": {
+      "maxDuration": 20
+    },
+    "api/analyze.js": {
       "maxDuration": 15
     }
   }

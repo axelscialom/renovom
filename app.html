@@ -159,20 +159,72 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 .cart-modal-total { display: flex; justify-content: space-between; font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 1rem; }
 .btn-checkout { background: var(--green); color: white; border: none; border-radius: 50px; padding: 0.85rem 2rem; font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; transition: all 0.2s; }
 .btn-checkout:hover { background: #0A5A46; transform: translateY(-1px); }
+
+/* === TYPE CARDS (meublée/vide) === */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2rem; }
+.type-card { background: var(--white); border: 1.5px solid var(--gray-light); border-radius: 18px; padding: 1.5rem 1rem; cursor: pointer; transition: all 0.15s; text-align: center; }
+.type-card:hover { border-color: var(--violet-light); background: var(--violet-pale); }
+.type-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
+.type-card-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.type-card-title { font-size: 0.95rem; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+.type-card-desc { font-size: 0.75rem; color: var(--gray); line-height: 1.4; }
+
+/* === ELEMENT SELECTION CARDS === */
+.element-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
+.element-card { background: var(--white); border: 1.5px solid var(--gray-light); border-radius: 14px; padding: 1rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 10px; }
+.element-card:hover { border-color: var(--violet-light); }
+.element-card.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
+.element-card .el-icon { font-size: 1.4rem; flex-shrink: 0; }
+.element-card .el-name { font-size: 0.83rem; font-weight: 500; color: var(--dark); }
+.element-check { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--gray-light); flex-shrink: 0; transition: all 0.15s; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: white; }
+.element-card.selected .element-check { background: var(--violet); border-color: var(--violet); }
+.analyzing-box { background: var(--violet-pale); border-radius: 14px; padding: 1.5rem; text-align: center; margin-bottom: 2rem; }
+.analyzing-spinner { width: 32px; height: 32px; border: 3px solid rgba(45,38,128,0.2); border-top-color: var(--violet); border-radius: 50%; animation: spin 0.85s linear infinite; margin: 0 auto 10px; }
+.analyzing-text { font-size: 0.85rem; color: var(--violet); font-weight: 500; }
+
+/* === PRODUCT OPTIONS (3 per element) === */
+.element-section { margin-bottom: 1.8rem; }
+.element-section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem; }
+.element-section-icon { font-size: 1.2rem; }
+.element-section-title { font-size: 0.85rem; font-weight: 700; color: var(--dark); text-transform: uppercase; letter-spacing: 0.06em; }
+.product-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.product-option { background: var(--white); border: 1.5px solid var(--gray-light); border-radius: 14px; padding: 0.85rem 0.7rem; cursor: pointer; transition: all 0.15s; text-align: center; }
+.product-option:hover { border-color: var(--violet-light); }
+.product-option.selected { border: 2px solid var(--violet); background: var(--violet-pale); }
+.opt-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.opt-store { font-size: 0.6rem; font-weight: 700; color: var(--violet); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.opt-name { font-size: 0.72rem; font-weight: 500; color: var(--dark); line-height: 1.3; margin-bottom: 4px; }
+.opt-price { font-size: 0.85rem; font-weight: 700; color: var(--violet); }
+.opt-delivery { font-size: 0.6rem; color: var(--green); margin-top: 2px; line-height: 1.3; }
+.options-loading { background: var(--violet-pale); border-radius: 14px; padding: 1.5rem; text-align: center; }
+.btn-secondary { background: transparent; color: var(--gray); border: 1.5px solid var(--gray-light); border-radius: 50px; padding: 0.75rem 2rem; font-family: var(--font-body); font-size: 0.85rem; font-weight: 500; cursor: pointer; width: 100%; margin-top: 0.75rem; transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(--violet-light); color: var(--violet); }
+
+/* === FEEDBACK / CHAT AJUSTEMENTS === */
+.feedback-box { background: var(--white); border: 1px solid var(--gray-light); border-radius: 16px; padding: 1.2rem; margin-top: 1.5rem; margin-bottom: 1rem; }
+.feedback-title { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--violet); margin-bottom: 0.8rem; }
+.feedback-row { display: flex; gap: 8px; }
+.feedback-input { flex: 1; padding: 0.6rem 1rem; border: 1px solid var(--gray-light); border-radius: 50px; font-size: 0.85rem; font-family: var(--font-body); color: var(--dark); background: var(--cream); outline: none; }
+.feedback-input:focus { border-color: var(--violet-light); }
+.btn-regenerate { background: var(--violet); color: white; border: none; border-radius: 50px; padding: 0.6rem 1.1rem; font-size: 0.82rem; font-weight: 500; cursor: pointer; white-space: nowrap; font-family: var(--font-body); }
+.btn-regenerate:hover { background: var(--violet-light); }
+.btn-regenerate:disabled { background: var(--gray-light); color: var(--gray); cursor: not-allowed; }
+.method-badge { display: inline-block; font-size: 0.65rem; background: var(--violet-pale); color: var(--violet); padding: 3px 10px; border-radius: 50px; margin-top: 6px; }
 </style>
 </head>
 <body>
 
 <nav class="app-nav">
   <a href="index.html" class="nav-logo">Renovom<span>.</span></a>
-  <div class="nav-step-info" id="nav-step">Étape 1 / 6</div>
+  <div class="nav-step-info" id="nav-step">Étape 1 / 7</div>
 </nav>
 
 <div class="app-container">
 
+  <!-- S1: Room selection -->
   <div class="screen active" id="s1">
-    <div class="progress"><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
-    <div class="step-label">Étape 1 / 6</div>
+    <div class="progress"><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 1 / 7</div>
     <h1 class="screen-title">Quelle pièce souhaitez-vous rénover ?</h1>
     <p class="screen-sub">Nous adapterons chaque recommandation à votre espace.</p>
     <div class="grid-2" id="room-grid">
@@ -186,11 +238,33 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
     <button class="btn-primary" id="btn1" disabled onclick="goTo(2)">Continuer →</button>
   </div>
 
+  <!-- S2: Meublée ou vide -->
   <div class="screen" id="s2">
-    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
-    <div class="step-label">Étape 2 / 6</div>
-    <h1 class="screen-title">Uploadez une photo de votre pièce</h1>
-    <p class="screen-sub">L'IA analysera votre espace pour des recommandations ultra-personnalisées.</p>
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 2 / 7</div>
+    <h1 class="screen-title">Votre pièce est-elle meublée ?</h1>
+    <p class="screen-sub">Cela détermine comment l'IA va travailler sur votre espace.</p>
+    <div class="type-grid">
+      <div class="type-card" id="type-meuble" onclick="pickType(this,'meuble')">
+        <div class="type-card-icon">🛋️</div>
+        <div class="type-card-title">Pièce meublée</div>
+        <div class="type-card-desc">J'ai des meubles existants à transformer</div>
+      </div>
+      <div class="type-card" id="type-vide" onclick="pickType(this,'vide')">
+        <div class="type-card-icon">🏠</div>
+        <div class="type-card-title">Pièce vide</div>
+        <div class="type-card-desc">Je pars de zéro, tout est à meubler</div>
+      </div>
+    </div>
+    <button class="btn-primary" id="btn2" disabled onclick="goTo(3)">Continuer →</button>
+  </div>
+
+  <!-- S3: Photo upload -->
+  <div class="screen" id="s3">
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 3 / 7</div>
+    <h1 class="screen-title" id="s3-title">Uploadez une photo de votre pièce</h1>
+    <p class="screen-sub" id="s3-sub">L'IA analysera votre espace pour des recommandations ultra-personnalisées.</p>
     <div class="upload-zone" id="upload-zone">
       <input type="file" accept="image/*" onchange="handlePhoto(event)" />
       <div id="upload-placeholder">
@@ -201,12 +275,14 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
       <img id="photo-preview" />
       <div class="photo-badge" id="photo-badge">Photo chargée ✓</div>
     </div>
-    <button class="btn-primary" id="btn2" disabled onclick="goTo(3)">Analyser ma pièce →</button>
+    <button class="btn-primary" id="btn3" disabled onclick="goTo(4)">Analyser ma pièce →</button>
+    <button class="btn-secondary" id="btn3-skip" onclick="skipPhoto()">Passer sans photo →</button>
   </div>
 
-  <div class="screen" id="s3">
-    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
-    <div class="step-label">Étape 3 / 6</div>
+  <!-- S4: Budget -->
+  <div class="screen" id="s4">
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 4 / 7</div>
     <h1 class="screen-title">Quel est votre budget ?</h1>
     <p class="screen-sub">Nous trouverons les meilleurs produits dans cette fourchette.</p>
     <div class="budget-grid" id="budget-grid">
@@ -215,12 +291,13 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
       <div class="budget-card" onclick="pick(this,'budget','1 500 – 5 000€')"><div class="budget-amount">1 500 – 5 000 €</div><div class="budget-desc">Rénovation complète</div></div>
       <div class="budget-card" onclick="pick(this,'budget','+ 5 000€')"><div class="budget-amount">+ 5 000 €</div><div class="budget-desc">Projet ambitieux</div></div>
     </div>
-    <button class="btn-primary" id="btn3" disabled onclick="goTo(4)">Continuer →</button>
+    <button class="btn-primary" id="btn4" disabled onclick="goTo(5)">Continuer →</button>
   </div>
 
-  <div class="screen" id="s4">
-    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
-    <div class="step-label">Étape 4 / 6</div>
+  <!-- S5: Style -->
+  <div class="screen" id="s5">
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 5 / 7</div>
     <h1 class="screen-title">Quel style vous attire ?</h1>
     <p class="screen-sub">L'ambiance de votre future pièce.</p>
     <div class="style-grid" id="style-grid">
@@ -230,35 +307,54 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
       <div class="style-card" onclick="pick(this,'style','Vintage')"><div class="style-thumb" style="background:#FAECE7;">🪑</div><div class="style-name">Vintage</div><div class="style-mood">Rétro · Patine</div></div>
       <div class="style-card" onclick="pick(this,'style','Contemporain')"><div class="style-thumb" style="background:#1A1A2E;">◼</div><div class="style-name">Contemporain</div><div class="style-mood">Luxe · Net</div></div>
     </div>
-    <button class="btn-primary" id="btn4" disabled onclick="goTo(5)">Continuer →</button>
+    <button class="btn-primary" id="btn5" disabled onclick="goTo(6)">Continuer →</button>
   </div>
 
-  <div class="screen" id="s5">
-    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div></div>
-    <div class="step-label">Étape 5 / 6</div>
-    <h1 class="screen-title">Affinons votre projet</h1>
-    <p class="screen-sub">Je vous pose quelques questions pour personnaliser votre plan au maximum.</p>
-    <div class="chat-wrap">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-input-row">
-        <input class="chat-input" id="chat-input" placeholder="Votre réponse..." onkeydown="if(event.key==='Enter')sendMsg()" />
-        <button class="chat-send" onclick="sendMsg()">→</button>
+  <!-- S6: Element selection -->
+  <div class="screen" id="s6">
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div><div class="progress-seg"></div></div>
+    <div class="step-label">Étape 6 / 7</div>
+    <h1 class="screen-title">Éléments à rénover</h1>
+    <p class="screen-sub">Sélectionnez les éléments que vous souhaitez changer.</p>
+    <div class="analyzing-box" id="analyzing-box">
+      <div class="analyzing-spinner"></div>
+      <div class="analyzing-text">Analyse de votre pièce en cours…</div>
+    </div>
+    <div class="element-grid" id="elements-grid" style="display:none;"></div>
+    <button class="btn-primary" id="btn6" disabled onclick="goTo(7)">Choisir les produits →</button>
+  </div>
+
+  <!-- S7: Product selection -->
+  <div class="screen" id="s7">
+    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div></div>
+    <div class="step-label">Étape 7 / 7</div>
+    <h1 class="screen-title">Choisissez vos produits</h1>
+    <p class="screen-sub">3 options par élément, du moins cher au premium.</p>
+    <div class="options-loading" id="products-loading">
+      <div class="analyzing-spinner"></div>
+      <p style="font-size:0.85rem;color:var(--violet);font-weight:500;margin-top:0.8rem;">Recherche des meilleurs produits…</p>
+    </div>
+    <div id="products-selection"></div>
+    <button class="btn-primary" id="btn7" disabled onclick="startGenerate()">Générer ma pièce rénovée →</button>
+  </div>
+
+  <!-- S8: Results -->
+  <div class="screen" id="s8">
+    <div id="result-hero" class="result-hero"></div>
+    <div class="feedback-box">
+      <div class="feedback-title">✦ Affinez votre résultat</div>
+      <div class="feedback-row">
+        <input class="feedback-input" id="feedback-input" placeholder="Ex: rends le plus lumineux, change le canapé en bleu…" onkeydown="if(event.key==='Enter')submitFeedback()" />
+        <button class="btn-regenerate" id="btn-regenerate" onclick="submitFeedback()">Regénérer</button>
       </div>
     </div>
-    <button class="btn-primary" id="btn5" style="display:none;" onclick="goTo(6)">Générer ma pièce rénovée →</button>
-  </div>
-
-  <div class="screen" id="s6">
-    <div class="progress"><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg done"></div><div class="progress-seg active"></div></div>
-    <div id="result-hero" class="result-hero"></div>
-    <h1 class="screen-title" id="result-title"></h1>
-    <p class="screen-sub" id="result-sub"></p>
-    <div class="cart-bar" id="cart-bar" onclick="openCartModal()" style="cursor:pointer;">
+    <div class="cart-bar" id="cart-bar" onclick="openCartModal()" style="cursor:pointer;display:none;">
       <span class="cart-info" id="cart-info">0 produit dans le panier</span>
       <span class="cart-total" id="cart-total">0,00 €  →</span>
     </div>
-    <div id="products-list"></div>
-    <button class="btn-order" id="btn-order" onclick="openCartModal()">Voir mon panier Renovom →</button>
+    <div id="selected-products-list"></div>
+    <button class="btn-order" id="btn-order" onclick="openCartModal()" style="display:none;">Voir mon panier Renovom →</button>
+    <button class="btn-secondary" style="margin-top:1rem;" onclick="restartApp()">Recommencer un projet</button>
   </div>
 
   <!-- Cart Modal -->
@@ -279,19 +375,74 @@ body { font-family: var(--font-body); background: var(--cream); color: var(--dar
 </div>
 
 <script>
-const state = { room:'', budget:'', style:'', photo:null, cart:[], total:0 };
-const added = new Set();
+const state = {
+  room: '', roomType: '', budget: '', style: '',
+  photo: null, elements: [], selectedElements: [],
+  products: {}, selectedProducts: {},
+  cart: [], total: 0
+};
+const cartAdded = new Set();
 
-function pick(el, key, val) {
-  el.parentElement.querySelectorAll('.choice-card,.budget-card,.style-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  state[key] = val;
-  const map = {room:'btn1',budget:'btn3',style:'btn4'};
-  if(map[key]) document.getElementById(map[key]).disabled = false;
+// =====================================================
+// NAVIGATION
+// =====================================================
+function goTo(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s' + n).classList.add('active');
+  document.getElementById('nav-step').textContent = 'Étape ' + n + ' / 7';
+  window.scrollTo(0, 0);
+  if (n === 6) analyzeRoom();
+  if (n === 7) loadProducts();
 }
 
+function restartApp() {
+  Object.assign(state, { room:'', roomType:'', budget:'', style:'', photo:null, elements:[], selectedElements:[], products:{}, selectedProducts:{}, cart:[], total:0 });
+  cartAdded.clear();
+  // Reset upload zone
+  document.getElementById('photo-preview').style.display = 'none';
+  document.getElementById('upload-placeholder').style.display = 'block';
+  document.getElementById('photo-badge').style.display = 'none';
+  document.getElementById('upload-zone').classList.remove('has-photo');
+  document.getElementById('btn3').disabled = true;
+  goTo(1);
+}
+
+// =====================================================
+// STEP 1 — ROOM
+// =====================================================
+function pick(el, key, val) {
+  el.parentElement.querySelectorAll('.choice-card,.budget-card,.style-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[key] = val;
+  const map = { room: 'btn1', budget: 'btn4', style: 'btn5' };
+  if (map[key]) document.getElementById(map[key]).disabled = false;
+}
+
+// =====================================================
+// STEP 2 — MEUBLÉE / VIDE
+// =====================================================
+function pickType(el, val) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.roomType = val;
+  document.getElementById('btn2').disabled = false;
+  // Update s3 copy
+  if (val === 'vide') {
+    document.getElementById('s3-title').textContent = 'Vous pouvez ajouter une photo (optionnel)';
+    document.getElementById('s3-sub').textContent = 'Pour une pièce vide, l\'IA génèrera directement la nouvelle ambiance depuis zéro.';
+    document.getElementById('btn3-skip').style.display = 'block';
+  } else {
+    document.getElementById('s3-title').textContent = 'Uploadez une photo de votre pièce';
+    document.getElementById('s3-sub').textContent = 'L\'IA utilisera votre photo pour transformer votre espace existant.';
+    document.getElementById('btn3-skip').style.display = 'none';
+  }
+}
+
+// =====================================================
+// STEP 3 — PHOTO
+// =====================================================
 function handlePhoto(e) {
-  const file = e.target.files[0]; if(!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
   r.onload = ev => {
     state.photo = ev.target.result;
@@ -300,88 +451,14 @@ function handlePhoto(e) {
     document.getElementById('upload-placeholder').style.display = 'none';
     document.getElementById('photo-badge').style.display = 'block';
     document.getElementById('upload-zone').classList.add('has-photo');
-    document.getElementById('btn2').disabled = false;
+    document.getElementById('btn3').disabled = false;
   };
   r.readAsDataURL(file);
 }
 
-function goTo(n) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s'+n).classList.add('active');
-  document.getElementById('nav-step').textContent = 'Étape '+n+' / 6';
-  window.scrollTo(0,0);
-  if(n===5) initChat();
-  if(n===6) generateAndShowResults();
-}
-
-let chatHistory = [];
-
-function initChat() {
-  document.getElementById('chat-messages').innerHTML = '';
-  chatHistory = [];
-  setTimeout(() => callAI(null), 500);
-}
-
-async function callAI(userMessage) {
-  const isFirst = chatHistory.length === 0;
-  if(userMessage !== null) {
-    chatHistory.push({ role: 'user', content: userMessage });
-  }
-  addTyping();
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: chatHistory,
-        room: state.room,
-        budget: state.budget,
-        style: state.style
-      })
-    });
-    const data = await res.json();
-    document.getElementById('typing')?.remove();
-    addAI(data.reply);
-    if(isFirst) {
-      // Seed history with the context message the backend sent on our behalf
-      chatHistory.push({ role: 'user', content: `Je veux rénover ma ${state.room}. Mon budget est ${state.budget} et je veux un style ${state.style}.` });
-    }
-    chatHistory.push({ role: 'assistant', content: data.reply });
-    if(chatHistory.filter(m => m.role === 'assistant').length >= 2) {
-      setTimeout(() => { document.getElementById('btn5').style.display = 'block'; }, 300);
-    }
-  } catch(e) {
-    document.getElementById('typing')?.remove();
-    addAI("Désolé, une erreur est survenue. Réessayez !");
-  }
-}
-
-function addAI(text) {
-  const area = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg ai';
-  d.innerHTML = '<div class="ai-av">R</div><div class="bubble">'+text+'</div>';
-  area.appendChild(d); area.scrollTop = area.scrollHeight;
-}
-
-function addUser(text) {
-  const area = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg user';
-  d.innerHTML = '<div class="bubble">'+text+'</div>';
-  area.appendChild(d); area.scrollTop = area.scrollHeight;
-}
-
-function addTyping() {
-  const area = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg ai'; d.id = 'typing';
-  d.innerHTML = '<div class="ai-av">R</div><div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  area.appendChild(d); area.scrollTop = area.scrollHeight;
-}
-
-function sendMsg() {
-  const inp = document.getElementById('chat-input');
-  const val = inp.value.trim(); if(!val) return;
-  addUser(val); inp.value = '';
-  callAI(val);
+function skipPhoto() {
+  state.photo = null;
+  goTo(4);
 }
 
 // =====================================================
@@ -402,74 +479,156 @@ function buildStoreUrl(p) {
 }
 
 // =====================================================
-// PRODUCT SKELETON LOADING
+// STEP 6 — ANALYZE ROOM (detect elements)
 // =====================================================
-function showProductsSkeleton() {
-  const list = document.getElementById('products-list');
-  const skels = Array(5).fill(0).map(() => `
-    <div class="product-card-full prod-skeleton">
-      <div class="prod-img skel-box" style="background:var(--gray-light);min-width:70px;height:70px;"></div>
-      <div class="prod-info" style="flex:1">
-        <div class="skel-line" style="width:55%;height:10px;margin-bottom:8px;"></div>
-        <div class="skel-line" style="width:90%;height:15px;margin-bottom:6px;"></div>
-        <div class="skel-line" style="width:75%;height:11px;margin-bottom:6px;"></div>
-        <div class="skel-line" style="width:35%;height:17px;margin-bottom:10px;"></div>
-        <div class="skel-line" style="width:60%;height:28px;border-radius:50px;"></div>
-      </div>
-    </div>`).join('');
-  list.innerHTML = `<p style="font-size:0.78rem;color:var(--gray);margin-bottom:0.8rem;font-style:italic;">✦ Sélection de produits personnalisée en cours…</p>${skels}`;
+async function analyzeRoom() {
+  state.selectedElements = [];
+  document.getElementById('btn6').disabled = true;
+  document.getElementById('elements-grid').style.display = 'none';
+  document.getElementById('analyzing-box').style.display = 'block';
+
+  try {
+    const photo = state.photo ? await compressPhoto(state.photo) : null;
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photo, room: state.room })
+    });
+    const data = await res.json();
+    state.elements = data.elements || [];
+  } catch (e) {
+    state.elements = [
+      { name: 'Peinture murale', icon: '🎨' },
+      { name: 'Mobilier principal', icon: '🛋️' },
+      { name: 'Luminaire', icon: '💡' },
+      { name: 'Accessoires déco', icon: '🪴' }
+    ];
+  }
+
+  document.getElementById('analyzing-box').style.display = 'none';
+  renderElementCards();
+}
+
+function renderElementCards() {
+  const grid = document.getElementById('elements-grid');
+  grid.innerHTML = '';
+  state.elements.forEach((el, i) => {
+    const card = document.createElement('div');
+    card.className = 'element-card selected';
+    card.dataset.index = i;
+    card.onclick = () => toggleElement(card, el.name);
+    card.innerHTML = `<span class="el-icon">${el.icon}</span><span class="el-name">${el.name}</span><span class="element-check">✓</span>`;
+    grid.appendChild(card);
+  });
+  // All selected by default
+  state.selectedElements = state.elements.map(e => e.name);
+  grid.style.display = 'grid';
+  document.getElementById('btn6').disabled = false;
+}
+
+function toggleElement(card, name) {
+  card.classList.toggle('selected');
+  const check = card.querySelector('.element-check');
+  if (card.classList.contains('selected')) {
+    check.textContent = '✓';
+    if (!state.selectedElements.includes(name)) state.selectedElements.push(name);
+  } else {
+    check.textContent = '';
+    state.selectedElements = state.selectedElements.filter(n => n !== name);
+  }
+  document.getElementById('btn6').disabled = state.selectedElements.length === 0;
 }
 
 // =====================================================
-// RENDER PRODUCTS (FICHES PRODUIT)
+// STEP 7 — LOAD & RENDER PRODUCT OPTIONS
 // =====================================================
-function renderProducts(products) {
-  const list = document.getElementById('products-list');
-  list.innerHTML = '';
+async function loadProducts() {
+  state.selectedProducts = {};
+  document.getElementById('products-selection').innerHTML = '';
+  document.getElementById('products-loading').style.display = 'block';
+  document.getElementById('btn7').disabled = true;
 
-  if (!products || products.length === 0) {
-    list.innerHTML = `<div style="background:#FFF5F5;border:1px solid #FFCCCC;border-radius:12px;padding:1rem;margin-top:0.5rem;">
-      <p style="color:#C0392B;font-size:0.82rem;font-weight:600;margin-bottom:4px;">Recommandations indisponibles</p>
-      <p style="color:#666;font-size:0.78rem;">L'API de recommandations produits n'a pas répondu. Vérifiez que <code style="background:#F5F5F5;padding:1px 5px;border-radius:3px;">ANTHROPIC_API_KEY</code> est configurée dans les variables d'environnement Vercel.</p>
+  const selectedEls = state.elements.filter(e => state.selectedElements.includes(e.name));
+
+  try {
+    const res = await fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ elements: selectedEls, style: state.style, budget: state.budget })
+    });
+    const data = await res.json();
+    state.products = data.products || {};
+  } catch (e) {
+    state.products = {};
+  }
+
+  document.getElementById('products-loading').style.display = 'none';
+  renderProductOptions();
+}
+
+function renderProductOptions() {
+  const container = document.getElementById('products-selection');
+  container.innerHTML = '';
+
+  const elementNames = Object.keys(state.products);
+  if (elementNames.length === 0) {
+    container.innerHTML = `<div style="background:#FFF5F5;border:1px solid #FFCCCC;border-radius:12px;padding:1rem;">
+      <p style="color:#C0392B;font-size:0.82rem;font-weight:600;">Produits indisponibles</p>
+      <p style="color:#666;font-size:0.78rem;margin-top:4px;">Vérifiez que ANTHROPIC_API_KEY est configurée.</p>
     </div>`;
+    document.getElementById('btn7').disabled = false;
     return;
   }
 
-  const sectionLabel = document.createElement('p');
-  sectionLabel.style.cssText = 'font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--violet);margin-bottom:0.8rem;';
-  sectionLabel.textContent = 'Produits recommandés pour ce projet';
-  list.appendChild(sectionLabel);
+  elementNames.forEach(elName => {
+    const options = state.products[elName];
+    if (!options || !options.length) return;
 
-  products.forEach(function(p, i) {
-    const storeUrl = buildStoreUrl(p);
-    // Safely escape for inline event handler
-    const safeName = p.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
-    const safeStore = (p.store || '').replace(/'/g, "\\'");
-    const safeUrl = storeUrl.replace(/'/g, '%27');
+    const elObj = state.elements.find(e => e.name === elName) || { icon: '📦', name: elName };
 
-    const card = document.createElement('div');
-    card.className = 'product-card-full';
-    card.innerHTML = `
-      <div class="prod-img" style="background:${p.iconBg || '#F5F0E8'}">${p.icon || '📦'}</div>
-      <div class="prod-info">
-        <div class="prod-meta-row">
-          <span class="prod-store-badge">${p.store || ''}</span>
-          <span class="prod-category-badge">${p.category || ''}</span>
-        </div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-desc">${p.description || ''}</div>
-        <div class="prod-price-row">
-          <span class="prod-price">${p.price.toFixed(2).replace('.', ',')} €</span>
-          <span class="prod-delivery">✓ ${p.delivery || 'Livraison disponible'}</span>
-        </div>
-        ${p.matchReason ? `<div class="prod-match-reason">✦ ${p.matchReason}</div>` : ''}
-        <div class="prod-actions">
-          <button class="btn-add-cart" id="cb${i}" onclick="addCart(${i},'${safeName}',${p.price},'${safeStore}','${safeUrl}')">+ Ajouter au panier</button>
-          <a class="btn-view-product" href="${storeUrl}" target="_blank" rel="noopener noreferrer">Voir chez ${p.store} →</a>
-        </div>
-      </div>`;
-    list.appendChild(card);
+    const section = document.createElement('div');
+    section.className = 'element-section';
+    section.innerHTML = `
+      <div class="element-section-header">
+        <span class="element-section-icon">${elObj.icon}</span>
+        <span class="element-section-title">${elName}</span>
+      </div>
+      <div class="product-options" id="opts-${CSS.escape(elName)}"></div>`;
+    container.appendChild(section);
+
+    const optsGrid = section.querySelector('.product-options');
+    options.forEach((p, i) => {
+      const opt = document.createElement('div');
+      opt.className = 'product-option';
+      opt.innerHTML = `
+        <div class="opt-icon" style="background:${p.iconBg||'#F5F0E8'};border-radius:8px;padding:6px;">${p.icon||'📦'}</div>
+        <div class="opt-store">${p.store}</div>
+        <div class="opt-name">${p.name}</div>
+        <div class="opt-price">${(+p.price).toFixed(2).replace('.',',')} €</div>
+        <div class="opt-delivery">${p.delivery||''}</div>`;
+      opt.onclick = () => selectProduct(elName, i, opt, p);
+      optsGrid.appendChild(opt);
+    });
   });
+
+  updateGenerateBtn();
+}
+
+function selectProduct(elName, idx, card, product) {
+  const grid = document.getElementById('opts-' + CSS.escape(elName));
+  grid?.querySelectorAll('.product-option').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  state.selectedProducts[elName] = product;
+  updateGenerateBtn();
+}
+
+function updateGenerateBtn() {
+  const total = Object.keys(state.products).length;
+  const selected = Object.keys(state.selectedProducts).length;
+  document.getElementById('btn7').disabled = selected === 0;
+  document.getElementById('btn7').textContent = selected > 0
+    ? `Générer avec ${selected} produit${selected > 1 ? 's' : ''} sélectionné${selected > 1 ? 's' : ''} →`
+    : 'Choisissez au moins un produit';
 }
 
 // =====================================================
@@ -477,100 +636,132 @@ function renderProducts(products) {
 // =====================================================
 function compressPhoto(dataUrl) {
   return new Promise(resolve => {
-    if(!dataUrl) return resolve(null);
+    if (!dataUrl) return resolve(null);
     const img = new Image();
     img.onload = () => {
-      const MAX = 512;
+      const MAX = 1024;
       const ratio = Math.min(MAX / img.width, MAX / img.height, 1);
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(img.width * ratio);
       canvas.height = Math.round(img.height * ratio);
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL('image/jpeg', 0.75));
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
     };
     img.onerror = () => resolve(null);
     img.src = dataUrl;
   });
 }
 
-async function generateAndShowResults() {
-  // Reset state
-  added.clear();
+// =====================================================
+// STEP 8 — GENERATE IMAGE
+// =====================================================
+async function startGenerate() {
+  cartAdded.clear();
   state.cart = [];
   state.total = 0;
-
-  const hero = document.getElementById('result-hero');
-  document.getElementById('result-title').textContent = '';
-  document.getElementById('result-sub').textContent = '';
   document.getElementById('cart-bar').style.display = 'none';
   document.getElementById('btn-order').style.display = 'none';
 
-  // Show image spinner immediately
+  // Switch to results screen and show spinner
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s8').classList.add('active');
+  document.getElementById('nav-step').textContent = 'Résultats';
+  window.scrollTo(0, 0);
+
+  const hero = document.getElementById('result-hero');
+  const modelLabel = state.photo && state.roomType === 'meuble' ? 'gpt-image-1' : 'DALL·E 3';
   hero.innerHTML = `<div class="result-generating">
-    <div class="gen-label">DALL·E 3</div>
+    <div class="gen-label">${modelLabel}</div>
     <div class="gen-spinner"></div>
     <div class="gen-text">Génération de votre ${state.room} style ${state.style}…</div>
   </div>`;
 
-  // Show product skeleton immediately (products load in parallel)
-  showProductsSkeleton();
+  document.getElementById('selected-products-list').innerHTML = '';
+  document.getElementById('btn-regenerate').disabled = true;
 
-  const userNotes = chatHistory
-    .filter((m, i) => m.role === 'user' && i > 0)
-    .map(m => m.content)
-    .slice(0, 2);
-
-  // Compress uploaded photo to ~512px (stays within Vercel 4.5MB body limit)
   const photo = await compressPhoto(state.photo);
 
-  // Run image generation and product recommendations in parallel
-  const [imageResult, productsResult] = await Promise.allSettled([
-    fetch('/api/image', {
+  try {
+    const res = await fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room: state.room, budget: state.budget, style: state.style, notes: userNotes, photo })
-    }).then(r => r.json()).catch(e => ({ error: e.message })),
+      body: JSON.stringify({
+        room: state.room,
+        style: state.style,
+        photo,
+        roomType: state.roomType,
+        selectedProducts: state.selectedProducts
+      })
+    });
+    const data = await res.json();
+    showResultImage(data.imageUrl || null, data.error || null, data.method || null);
+  } catch (e) {
+    showResultImage(null, e.message, null);
+  }
 
-    fetch('/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ room: state.room, style: state.style, budget: state.budget, notes: userNotes })
-    }).then(r => r.json()).catch(e => ({ error: e.message }))
-  ]);
-
-  const imageData = imageResult.status === 'fulfilled' ? imageResult.value : {};
-  const productsData = productsResult.status === 'fulfilled' ? productsResult.value : {};
-
-  const dalleUrl = imageData.imageUrl || null;
-  const dalleError = imageData.error || (imageResult.status === 'rejected' ? 'Erreur réseau image' : null);
-  const products = productsData.products || null;
-
-  showResults(dalleUrl, dalleError, products);
+  renderSelectedProducts();
+  document.getElementById('btn-regenerate').disabled = false;
 }
 
-function showResults(dalleUrl, dalleError, products) {
-  document.getElementById('result-title').textContent = 'Votre ' + state.room + ' style ' + state.style;
-  document.getElementById('result-sub').textContent = 'Budget ' + state.budget + ' · Recommandations personnalisées par l\'IA';
-  const hero = document.getElementById('result-hero');
+async function submitFeedback() {
+  const input = document.getElementById('feedback-input');
+  const note = input.value.trim();
+  if (!note) return;
+  input.value = '';
+  document.getElementById('btn-regenerate').disabled = true;
 
-  // Remove any previous caption
+  const hero = document.getElementById('result-hero');
+  hero.innerHTML = `<div class="result-generating">
+    <div class="gen-label">Regénération…</div>
+    <div class="gen-spinner"></div>
+    <div class="gen-text">${note}</div>
+  </div>`;
+
+  const photo = await compressPhoto(state.photo);
+
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        room: state.room,
+        style: state.style,
+        photo,
+        roomType: state.roomType,
+        selectedProducts: state.selectedProducts,
+        refinementNote: note
+      })
+    });
+    const data = await res.json();
+    showResultImage(data.imageUrl || null, data.error || null, data.method || null);
+  } catch (e) {
+    showResultImage(null, e.message, null);
+  }
+
+  document.getElementById('btn-regenerate').disabled = false;
+}
+
+function showResultImage(url, error, method) {
+  const hero = document.getElementById('result-hero');
   document.querySelector('.dalle-caption')?.remove();
 
-  if (dalleUrl) {
-    hero.innerHTML = `<img src="${dalleUrl}" class="result-photo" style="filter:none;" />
+  if (url) {
+    const badge = method === 'gpt-image-1' ? '✦ Transformé par gpt-image-1' : '✦ Généré par DALL·E 3';
+    hero.innerHTML = `<img src="${url}" class="result-photo" style="filter:none;" />
       <div class="result-overlay">
-        <div class="dalle-badge">✦ Visualisation générée par DALL·E 3</div>
+        <div class="dalle-badge">${badge}</div>
         <div class="result-title">Style ${state.style}</div>
       </div>`;
     const caption = document.createElement('p');
     caption.className = 'dalle-caption';
-    caption.textContent = 'Image générée par IA · Les produits ci-dessous reproduisent ce résultat chez vous.';
+    caption.textContent = method === 'gpt-image-1'
+      ? 'Votre photo transformée par IA avec les produits sélectionnés.'
+      : 'Image générée par IA · Les produits sélectionnés reproduisent ce résultat.';
     hero.after(caption);
-  } else if (dalleError) {
-    hero.innerHTML = `<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;">
-      <div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération DALL·E indisponible</div>
-      <div class="gen-text" style="font-size:0.85rem;padding:0 1.5rem;text-align:center;">${dalleError}</div>
-      <div class="gen-label" style="color:rgba(255,255,255,0.6);">Vérifiez OPENAI_API_KEY dans Vercel</div>
+  } else if (error) {
+    hero.innerHTML = `<div class="result-generating" style="background:linear-gradient(135deg,#7B1F1F,#B03030);gap:8px;padding:1.5rem;">
+      <div class="gen-label" style="color:rgba(255,255,255,0.8);">Génération indisponible</div>
+      <div class="gen-text" style="font-size:0.82rem;padding:0 1rem;text-align:center;">${error}</div>
     </div>`;
   } else if (state.photo) {
     hero.innerHTML = `<img src="${state.photo}" class="result-photo" />
@@ -584,23 +775,56 @@ function showResults(dalleUrl, dalleError, products) {
       <div class="result-title">${state.room} · Style ${state.style}</div>
     </div>`;
   }
+}
 
-  renderProducts(products);
+function renderSelectedProducts() {
+  const list = document.getElementById('selected-products-list');
+  list.innerHTML = '';
+  const entries = Object.entries(state.selectedProducts);
+  if (entries.length === 0) return;
+
+  const label = document.createElement('p');
+  label.style.cssText = 'font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--violet);margin-bottom:0.8rem;margin-top:1rem;';
+  label.textContent = 'Produits sélectionnés';
+  list.appendChild(label);
+
+  entries.forEach(([elName, p], i) => {
+    const storeUrl = buildStoreUrl(p);
+    const card = document.createElement('div');
+    card.className = 'product-card-full';
+    card.innerHTML = `
+      <div class="prod-img" style="background:${p.iconBg||'#F5F0E8'}">${p.icon||'📦'}</div>
+      <div class="prod-info">
+        <div class="prod-meta-row">
+          <span class="prod-store-badge">${p.store||''}</span>
+          <span class="prod-category-badge">${elName}</span>
+        </div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-desc">${p.description||''}</div>
+        <div class="prod-price-row">
+          <span class="prod-price">${(+p.price).toFixed(2).replace('.',',')} €</span>
+          <span class="prod-delivery">✓ ${p.delivery||'Livraison disponible'}</span>
+        </div>
+        <div class="prod-actions">
+          <button class="btn-add-cart" id="scb${i}" onclick="addToCart(${i},'${p.name.replace(/'/g,"\\'")}',${p.price},'${(p.store||'').replace(/'/g,"\\'")}','${storeUrl.replace(/'/g,'%27')}')">+ Ajouter au panier</button>
+          <a class="btn-view-product" href="${storeUrl}" target="_blank" rel="noopener noreferrer">Voir chez ${p.store} →</a>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
 }
 
 // =====================================================
 // CART MANAGEMENT
 // =====================================================
-function addCart(i, name, price, store, url) {
-  if (added.has(i)) return;
-  added.add(i);
+function addToCart(i, name, price, store, url) {
+  if (cartAdded.has(i)) return;
+  cartAdded.add(i);
   state.total += price;
   state.cart.push({ name, price, store, url });
 
-  const btn = document.getElementById('cb' + i);
-  btn.textContent = '✓ Ajouté';
-  btn.classList.add('added');
-  btn.disabled = true;
+  const btn = document.getElementById('scb' + i);
+  if (btn) { btn.textContent = '✓ Ajouté'; btn.classList.add('added'); btn.disabled = true; }
 
   const count = state.cart.length;
   document.getElementById('cart-bar').style.display = 'flex';
