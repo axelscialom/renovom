@@ -1,84 +1,93 @@
+const styleMap = {
+  'Scandinave': 'Scandinavian interior, light oak wood, white walls, minimalist, cozy textiles, soft natural light',
+  'Industriel': 'industrial loft interior, exposed concrete walls, black metal fixtures, Edison bulbs, raw textures',
+  'Bohème': 'bohemian interior, rattan furniture, warm earthy tones, layered rugs, indoor plants, eclectic decor',
+  'Vintage': 'vintage mid-century modern interior, retro furniture, warm patina, antique decorative details',
+  'Contemporain': 'contemporary luxury interior, clean geometric lines, neutral palette, marble surfaces, premium finishes'
+};
+
+const roomMap = {
+  'Cuisine': 'kitchen',
+  'Chambre': 'bedroom',
+  'Salle de bain': 'bathroom',
+  'Salon': 'living room',
+  'Bureau': 'home office',
+  'Entrée': 'entrance hallway'
+};
+
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { room, style, photo, roomType, selectedProducts = {}, refinementNote = '' } = req.body || {};
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'OPENAI_API_KEY manquante' });
+
+  const styleDesc = styleMap[style] || 'modern interior';
+  const roomDesc = roomMap[room] || 'room';
+
+  // Build product context from dalleDescription fields
+  const productLines = Object.entries(selectedProducts)
+    .map(([elName, p]) => p.dalleDescription || p.name)
+    .filter(Boolean);
+  const productContext = productLines.length > 0 ? `featuring: ${productLines.join(', ')}` : '';
+  const refinementContext = refinementNote ? ` Additional adjustment: ${refinementNote}.` : '';
+
+  // ── Path A: gpt-image-1 editing (furnished room + photo) ──────────────────
+  if (photo && roomType === 'meuble') {
+    try {
+      const base64 = photo.replace(/^data:image\/\w+;base64,/, '');
+      const imageBuffer = Buffer.from(base64, 'base64');
+      const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
+
+      const editPrompt = [
+        `Transform this ${roomDesc} into a ${styleDesc} style interior.`,
+        productContext ? `Update the furniture and decor ${productContext}.` : '',
+        'Keep the original room architecture, floor plan, windows, and walls intact.',
+        'Make it look like a professional interior design photography.',
+        refinementContext
+      ].filter(Boolean).join(' ');
+
+      const formData = new FormData();
+      formData.append('model', 'gpt-image-1');
+      formData.append('image[]', imageBlob, 'room.png');
+      formData.append('prompt', editPrompt);
+      formData.append('n', '1');
+      formData.append('size', '1024x1024');
+
+      const editRes = await fetch('https://api.openai.com/v1/images/edits', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        body: formData
+      });
+
+      const editData = await editRes.json();
+      if (editData.error) throw new Error(editData.error.message);
+
+      const b64 = editData.data?.[0]?.b64_json;
+      if (!b64) throw new Error('No image returned from gpt-image-1');
+
+      return res.status(200).json({
+        imageUrl: `data:image/png;base64,${b64}`,
+        method: 'gpt-image-1'
+      });
+    } catch (e) {
+      // Fall through to DALL-E 3
+    }
   }
 
+  // ── Path B: DALL-E 3 (empty room, no photo, or gpt-image-1 fallback) ──────
   try {
-    const { room, budget, style, photo } = req.body;
+    const prompt = [
+      `Interior design photo of a beautifully renovated ${roomDesc}.`,
+      `Style: ${styleDesc}.`,
+      productContext ? `The room features ${productContext}.` : '',
+      'Professional interior photography, natural lighting, no people, photorealistic, wide angle shot.',
+      refinementContext
+    ].filter(Boolean).join(' ');
 
-    const styleMap = {
-      'Scandinave': 'Scandinavian interior, light oak wood, white walls, minimalist, cozy textiles, soft natural light',
-      'Industriel': 'industrial loft interior, exposed concrete walls, black metal fixtures, Edison bulbs, raw textures',
-      'Bohème': 'bohemian interior, rattan furniture, warm earthy tones, layered rugs, indoor plants, eclectic decor',
-      'Vintage': 'vintage mid-century modern interior, retro furniture, warm patina, antique decorative details',
-      'Contemporain': 'contemporary luxury interior, clean geometric lines, neutral palette, marble surfaces, premium finishes'
-    };
-
-    const roomMap = {
-      'Cuisine': 'kitchen',
-      'Chambre': 'bedroom',
-      'Salle de bain': 'bathroom',
-      'Salon': 'living room',
-      'Bureau': 'home office',
-      'Entrée': 'entrance hallway'
-    };
-
-    const styleDesc = styleMap[style] || 'modern interior';
-    const roomDesc = roomMap[room] || 'room';
-
-    // Optional: analyze room structure with GPT-4o-mini vision
-    // We use a strict 5s timeout so it never blocks DALL-E generation
-    let roomContext = '';
-    if (photo) {
-      try {
-        const controller = new AbortController();
-        const visionTimeout = setTimeout(() => controller.abort(), 5000);
-
-        const visionRes = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            max_tokens: 60,
-            messages: [{
-              role: 'user',
-              content: [
-                { type: 'image_url', image_url: { url: photo, detail: 'low' } },
-                { type: 'text', text: 'One sentence, English only: window positions, floor type, wall layout.' }
-              ]
-            }]
-          })
-        });
-
-        clearTimeout(visionTimeout);
-        const visionData = await visionRes.json();
-        if (visionData.choices?.[0]?.message?.content) {
-          // Sanitize: keep only printable ASCII to avoid DALL-E prompt validation errors
-          roomContext = visionData.choices[0].message.content
-            .replace(/[^\x20-\x7E]/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-            .slice(0, 200);
-        }
-      } catch (e) {
-        // Vision timed out or failed — continue without context
-      }
-    }
-
-    const prompt = roomContext
-      ? `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Room layout: ${roomContext}. Professional photography, natural lighting, no people.`
-      : `Interior design photo, renovated ${roomDesc}, ${styleDesc}. Professional photography, natural lighting, no people.`;
-
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
+    const dalleRes = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({
         model: 'dall-e-3',
         prompt,
@@ -88,15 +97,11 @@ export default async function handler(req, res) {
       })
     });
 
-    const data = await response.json();
+    const dalleData = await dalleRes.json();
+    if (dalleData.error) return res.status(500).json({ error: dalleData.error.message });
 
-    if (data.error) {
-      return res.status(500).json({ error: data.error.message });
-    }
-
-    res.status(200).json({ imageUrl: data.data[0].url });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(200).json({ imageUrl: dalleData.data[0].url, method: 'dall-e-3' });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
 }
