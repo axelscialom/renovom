@@ -1,101 +1,112 @@
+const budgetMap = {
+  'Moins de 500€':    'low budget — 3 tiers: ~30€, ~80€, ~150€',
+  '500 – 1 500€':    'mid budget — 3 tiers: ~80€, ~200€, ~400€',
+  '1 500 – 5 000€':  'good budget — 3 tiers: ~150€, ~400€, ~800€',
+  '+ 5 000€':        'premium budget — 3 tiers: ~300€, ~800€, ~2000€'
+};
+
+const styleHints = {
+  'Scandinave': 'light oak, white/beige, linen, minimalist, Scandinavian brands',
+  'Industriel': 'black metal, concrete, dark tones, raw materials, urban loft',
+  'Bohème': 'rattan, terracotta, warm tones, natural textiles, eclectic',
+  'Vintage': 'patina, velvet, dark wood, brass, mid-century modern',
+  'Contemporain': 'clean lines, black/white/grey, marble, glass, premium'
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  try {
-    const { elements, style, budget } = req.body;
-    // elements: array of { name, icon }
+  const { elements = [], style = '', budget = '' } = req.body || {};
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'ANTHROPIC_API_KEY manquante' });
 
-    const budgetDesc = {
-      'Moins de 500€':    'très petit budget — produits sous 80€ pièce',
-      '500 – 1 500€':    'budget intermédiaire — produits entre 20€ et 400€',
-      '1 500 – 5 000€':  'bon budget — produits entre 60€ et 900€',
-      '+ 5 000€':         'budget premium — produits haut de gamme'
-    }[budget] || 'budget intermédiaire';
+  if (elements.length === 0) return res.status(200).json({ products: {} });
 
-    const styleHints = {
-      'Scandinave':    'bois clair, blanc cassé, lin naturel, épuré, minimaliste chaleureux',
-      'Industriel':    'métal noir mat, béton, Edison, acier brossé, loft brut',
-      'Bohème':        'rotin, bambou, terracotta, plantes, textiles superposés, esprit libre',
-      'Vintage':       'velours, laiton doré, rétro mid-century, patine, courbes douces',
-      'Contemporain':  'marbre, noir et blanc, lignes géométriques nettes, luxe discret'
-    }[style] || 'moderne';
+  const budgetDesc = budgetMap[budget] || 'mid budget — 3 tiers: ~80€, ~200€, ~400€';
+  const styleDesc = styleHints[style] || 'modern';
+  const elementList = elements.map(e => e.name).join(', ');
 
-    const elementNames = elements.map(e => e.name).join(', ');
+  const systemPrompt = `You are a French interior design expert. You know products from Leroy Merlin, IKEA, Castorama, Maisons du Monde, La Redoute, and Brico Dépôt. You reply ONLY with valid JSON, no text before or after.`;
 
-    const systemPrompt = `Tu es expert en décoration intérieure et en produits disponibles dans les enseignes françaises (Leroy Merlin, IKEA, Castorama, Maisons du Monde, La Redoute, Brico Dépôt).
-Tu réponds UNIQUEMENT en JSON valide, sans aucun texte avant ou après.`;
+  const userPrompt = `Style: ${style} (${styleDesc})
+Budget level: ${budgetDesc}
+Elements to furnish: ${elementList}
 
-    const userPrompt = `Style: ${style} (${styleHints})
-Budget: ${budgetDesc}
+For EACH element, provide EXACTLY 3 product options ordered from cheapest to most expensive.
+Use real product names from French stores.
 
-Pour CHAQUE élément listé, propose EXACTEMENT 3 produits réels et différents.
-Les 3 produits d'un même élément doivent couvrir 3 gammes de prix (économique, milieu, premium).
-Éléments à traiter: ${elementNames}
-
-Format JSON obligatoire (les clés doivent correspondre exactement aux noms des éléments):
+Reply ONLY with this JSON structure (no text before or after):
 {
-  "${elements[0]?.name || 'Peinture murale'}": [
-    {
-      "name": "Nom précis du produit tel que vendu en magasin",
-      "store": "Leroy Merlin",
-      "price": 29.90,
-      "icon": "🎨",
-      "iconBg": "#F5F0E8",
-      "delivery": "Livraison gratuite dès 25€ · Click & Collect disponible",
-      "description": "Description courte en une phrase",
-      "dalleDescription": "brief English description for image generation, e.g. 'matte white wall paint'"
-    },
-    { ... produit 2 ... },
-    { ... produit 3 ... }
-  ]
+  "products": {
+    "ElementName": [
+      {
+        "name": "Exact product name as sold in store",
+        "description": "Short description in French, one sentence",
+        "store": "IKEA",
+        "price": 149,
+        "icon": "🛏️",
+        "iconBg": "#F5F0E8",
+        "delivery": "Click & Collect gratuit · Livraison à domicile dès 49€",
+        "searchQuery": "MALM lit cadre",
+        "dalleDescription": "light oak Scandinavian bed frame with white linen bedding, minimalist style"
+      }
+    ]
+  }
 }
 
-Règles:
-- Noms précis, reconnaissables
-- Prix réalistes pour ${budgetDesc}
-- iconBg: couleur hex douce cohérente avec style ${style}
-- Livraison réaliste par enseigne:
-  Leroy Merlin: "Livraison gratuite dès 25€ · Click & Collect disponible"
-  IKEA: "Click & Collect gratuit · Livraison à domicile dès 49€"
-  Castorama: "Livraison sous 3-5 jours · Click & Collect 2h"
-  Maisons du Monde: "Livraison à domicile · Retrait en magasin offert"
-  La Redoute: "Livraison gratuite dès 60€ · Retour 30 jours offert"
-  Brico Dépôt: "Livraison sous 48h · Click & Collect disponible"
-- dalleDescription: courte description en anglais pour générer une image réaliste`;
+Rules:
+- searchQuery: 2-4 key words in French that will find this exact product in the store's search engine (e.g. "MALM lit chêne" or "peinture blanc mat 10L"). Use the product reference/model name if known.
+- dalleDescription: English, 10-15 words, describes what the product looks like visually for an AI image prompt
+- icon: single emoji matching the element
+- iconBg: soft hex color matching style (Scandinave: #F5F0E8, Industriel: #3A3A4A, Bohème: #FAEEDA, Vintage: #F8F0E8, Contemporain: #F0F0F5)
+- store: must be one of: Leroy Merlin, IKEA, Castorama, Maisons du Monde, La Redoute, Brico Dépôt
+- delivery per store:
+  - Leroy Merlin: "Livraison gratuite dès 25€ · Click & Collect disponible"
+  - IKEA: "Click & Collect gratuit · Livraison à domicile dès 49€"
+  - Castorama: "Livraison sous 3-5 jours ouvrés · Click & Collect 2h"
+  - Maisons du Monde: "Livraison à domicile · Retrait en magasin offert"
+  - La Redoute: "Livraison gratuite dès 60€ · Retour 30 jours offert"
+  - Brico Dépôt: "Livraison sous 48h · Click & Collect disponible"
+- price: realistic number (no currency symbol)
+- Elements to include in response: ${elementList}`;
 
+  try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4000,
+        max_tokens: 4096,
         system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }]
       })
     });
 
     const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
+    if (data.error) return res.status(500).json({ error: data.error.message });
 
     const text = data.content[0].text.trim();
-    let products;
 
+    let parsed;
     try {
-      products = JSON.parse(text);
+      parsed = JSON.parse(text);
     } catch (e) {
       const codeBlock = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
       const rawJson = text.match(/(\{[\s\S]*\})/);
       const src = codeBlock ? codeBlock[1] : rawJson ? rawJson[1] : null;
-      if (src) products = JSON.parse(src);
-      else throw new Error('Cannot parse products JSON');
+      if (src) parsed = JSON.parse(src);
+      else throw new Error('Non-parseable AI response');
     }
 
-    return res.status(200).json({ products });
+    if (!parsed.products || typeof parsed.products !== 'object') {
+      throw new Error('Invalid products structure');
+    }
 
+    return res.status(200).json({ products: parsed.products });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
