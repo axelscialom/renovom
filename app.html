@@ -8,35 +8,35 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:          #E8E1D7;
-  --surface:     #F2ECE3;
-  --surface-2:   #EAE3D8;
-  --surface-3:   #DDD6C9;
+  --bg:          #E2DBD5;
+  --surface:     #EDE8E2;
+  --surface-2:   #E6E0DA;
+  --surface-3:   #D8D1CA;
   --terra:       #B84C23;
   --terra-l:     #D05C30;
   --terra-pale:  #F5EBE4;
   --text:        #1C1510;
-  --muted:       #7A6C5E;
-  --border:      #CEC6B8;
+  --muted:       #7A6C60;
+  --border:      #C8C0B8;
   --white:       #FFFFFF;
   --green:       #2E7D52;
   --font-display: 'EB Garamond', serif;
   --font-body:    'Jost', sans-serif;
-  /* aliases for all existing components */
+  /* aliases */
   --violet:      #B84C23;
   --violet-light:#D05C30;
   --violet-pale: #F5EBE4;
-  --cream:       #E8E1D7;
+  --cream:       #E2DBD5;
   --dark:        #1C1510;
-  --gray:        #7A6C5E;
-  --gray-light:  #CEC6B8;
-  --dim:         #CEC6B8;
+  --gray:        #7A6C60;
+  --gray-light:  #C8C0B8;
+  --dim:         #C8C0B8;
   --white:       #FFFFFF;
   --green:       #2E7D52;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
-.app-nav { padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(232,225,215,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.app-nav { padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(226,219,213,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
 .nav-logo { display:inline-flex; align-items:center; background:var(--terra); border-radius:10px; padding:3px 12px 4px; font-family:var(--font-display); font-size:1.15rem; font-weight:400; color:#fff; text-decoration:none; letter-spacing:0.01em; }
 .nav-logo em { color:rgba(255,255,255,0.75); font-style:italic; }
 .nav-step-info { font-size: 0.78rem; color: var(--muted); font-family: var(--font-body); }
@@ -66,7 +66,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
 .upload-title { font-size: 1rem; font-weight: 500; color: var(--dark); margin-bottom: 4px; }
 .upload-sub { font-size: 0.8rem; color: var(--gray); }
-.photo-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(45,38,128,0.85); color: white; font-size: 0.72rem; padding: 4px 12px; border-radius: 50px; pointer-events: none; display: none; }
+.photo-badge { position: absolute; bottom: 10px; right: 10px; background: rgba(184,76,35,0.85); color: white; font-size: 0.72rem; padding: 4px 12px; border-radius: 50px; pointer-events: none; display: none; }
 .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 2rem; }
 .budget-card { background: var(--surface); border: 1px solid var(--dim); border-radius: 14px; padding: 1.1rem 1.2rem; cursor: pointer; transition: all 0.15s; }
 .budget-card:hover { border-color: var(--terra-l); }
