@@ -9,5 +9,10 @@
     "api/analyze.js": {
       "maxDuration": 15
     }
+  },
+  "build": {
+    "env": {
+      "NODE_VERSION": "18"
+    }
   }
 }
