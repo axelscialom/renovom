@@ -8,18 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #0E0B09;
-  --surface:   #171210;
-  --surface-2: #201C19;
-  --surface-3: #2C2520;
+  --bg:        #E8E1D7;
+  --surface:   #F2ECE3;
+  --surface-2: #EAE3D8;
+  --surface-3: #DDD6C9;
   --terra:     #B84C23;
   --terra-l:   #D05C30;
-  --terra-pale:rgba(184,76,35,0.14);
-  --text:      #F0E8DF;
-  --muted:     #8A7060;
-  --dim:       #3D3028;
+  --terra-pale:#F5EBE4;
+  --text:      #1C1510;
+  --muted:     #7A6C5E;
+  --dim:       #CEC6B8;
   --white:     #FFFFFF;
-  --green:     #5BAF7A;
+  --green:     #2E7D52;
   --font-d:    'EB Garamond', serif;
   --font-b:    'Jost', sans-serif;
 }
@@ -33,18 +33,18 @@ body { font-family:var(--font-b); background:var(--bg); color:var(--text); overf
   background:var(--terra); border-radius:12px;
   padding:4px 15px 5px;
   font-family:var(--font-d); font-size:1.3rem; font-weight:400;
-  color:#1A0E08; text-decoration:none; letter-spacing:0.01em;
+  color:#fff; text-decoration:none; letter-spacing:0.01em;
   transition: transform 0.15s;
 }
 .logo:hover { transform:scale(1.02); }
-.logo em { color:#fff; font-style:italic; }
+.logo em { color:rgba(255,255,255,0.75); font-style:italic; }
 
 /* ── NAV ────────────────────────────────────────────── */
 nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
   padding:1.1rem 2.5rem;
   display:flex; align-items:center; justify-content:space-between;
-  background:rgba(14,11,9,0.85); backdrop-filter:blur(16px);
+  background:rgba(232,225,215,0.9); backdrop-filter:blur(16px);
   border-bottom:1px solid var(--dim);
 }
 .nav-cta {
@@ -64,7 +64,7 @@ nav {
 }
 .hero-bg {
   position:absolute; inset:0; z-index:0;
-  background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(184,76,35,0.12) 0%, transparent 65%);
+  background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(184,76,35,0.08) 0%, transparent 65%);
 }
 .hero-tag {
   display:inline-flex; align-items:center; gap:6px;
@@ -186,7 +186,7 @@ nav {
 .step-desc { font-size:0.8rem; color:var(--muted); line-height:1.65; font-weight:300; }
 
 /* ── STYLES SECTION ────────────────────────────────── */
-.styles-section { background:var(--surface); padding:6rem 2rem; border-top:1px solid var(--dim); border-bottom:1px solid var(--dim); }
+.styles-section { background:var(--surface-3); padding:6rem 2rem; border-top:1px solid var(--dim); border-bottom:1px solid var(--dim); }
 .styles-inner { max-width:1100px; margin:0 auto; }
 .styles-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
 .style-card {
